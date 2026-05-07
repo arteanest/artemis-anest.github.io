@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jardin des Plantes de Montpellier | Artemis Anest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #0a2a2e;
+    --green-mid: #0e6b6b;
+    --green-light: #2ec4b6;
+    --green-pale: #d0f5f2;
+    --cream: #f4fafa;
+    --sand: #d6ecea;
+    --text: #0d2626;
+    --text-muted: #3a7a78;
+    --accent: #0e9e96;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--green-deep);
+    padding: 1rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-name {
+    font-family: 'Playfair Display', serif;
+    color: var(--green-pale);
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--green-light);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+  /* HERO */
+  .hero {
+    background: var(--green-deep);
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(46,196,182,0.18);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 10%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(46,196,182,0.12);
+  }
+  .breadcrumb {
+    font-size: 0.75rem;
+    color: var(--green-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+  }
+  .breadcrumb span { opacity: 0.5; margin: 0 0.5rem; }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: #fff;
+    font-weight: 400;
+    line-height: 1.15;
+    max-width: 600px;
+  }
+  .hero h1 em {
+    color: var(--green-light);
+    font-style: italic;
+  }
+  .hero-desc {
+    margin-top: 1.25rem;
+    color: rgba(208,245,242,0.7);
+    font-size: 0.95rem;
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    margin-top: 2rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .hero-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--green-light);
+    font-weight: 300;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green-light);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--sand);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--green-deep);
+  }
+  .section-title span {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+  }
+  .panel-count {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* PANEL CARDS */
+  .panels-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .panel-card {
+    background: #fff;
+    border: 1px solid var(--sand);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .panel-card:hover {
+    box-shadow: 0 8px 32px rgba(10,42,46,0.08);
+    transform: translateY(-2px);
+  }
+
+  .panel-header {
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  .panel-number {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  .panel-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--green-deep);
+    line-height: 1.3;
+  }
+
+  .panel-common {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    font-weight: 300;
+  }
+
+  .panel-location {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+    font-weight: 300;
+  }
+  .panel-location::before {
+    content: '📍';
+    font-size: 0.7rem;
+  }
+
+  .panel-toggle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--sand);
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .panel-card.open .panel-toggle {
+    background: var(--green-deep);
+    color: #fff;
+    border-color: var(--green-deep);
+    transform: rotate(45deg);
+  }
+
+  /* PANEL BODY */
+  .panel-body {
+    display: none;
+    padding: 0 2rem 1.75rem;
+    border-top: 1px solid var(--sand);
+  }
+  .panel-card.open .panel-body { display: block; }
+
+  .versions-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 1.25rem 0 1rem;
+  }
+
+  .versions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .version-card {
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+
+  .version-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .lang-badge {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--green-pale);
+    color: var(--green-mid);
+  }
+  .lang-badge.fr { background: #e8f0fe; color: #1a47a3; }
+  .lang-badge.en { background: #fff3e0; color: #b85c00; }
+  .lang-badge.cn { background: #f3e8ff; color: #6b21a8; }
+
+  .version-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .version-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .version-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--green-mid);
+    text-decoration: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid var(--sand);
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+  .version-link:hover {
+    background: var(--green-pale);
+    border-color: var(--green-light);
+    color: var(--green-deep);
+  }
+  .version-link.placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    font-weight: 300;
+    cursor: default;
+    opacity: 0.6;
+  }
+  .version-link.placeholder:hover {
+    background: #fff;
+    border-color: var(--sand);
+  }
+
+  .link-icon { font-size: 0.75rem; opacity: 0.7; }
+
+  .physical-note {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1.1rem;
+    background: var(--green-pale);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--green-mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .physical-note::before { content: '🌿'; flex-shrink: 0; }
+
+  /* COMING SOON */
+  .coming-soon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  .coming-soon-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--sand);
+  }
+  .coming-card {
+    border: 1px dashed var(--sand);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .coming-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--sand);
+    flex-shrink: 0;
+  }
+  .coming-text {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--green-deep);
+    padding: 2rem 3rem;
+    text-align: center;
+    color: rgba(208,245,242,0.4);
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+  footer a { color: var(--green-light); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-name">Artemis Anest</div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Research</a></li>
+    <li><a href="#">Teaching</a></li>
+    <li><a href="#" class="active">Outreach</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="breadcrumb">Outreach <span>›</span> SEED-ED <span>›</span> Jardin des Plantes de Montpellier</div>
+  <h1><em>Jardin des Plantes</em><br>de Montpellier</h1>
+  <p class="hero-desc">Interpretation panels installed on-site at the oldest botanical garden in France. Each panel is available physically in French, and digitally in English and Chinese, with an associated report deposited on HAL.</p>
+  <div class="hero-meta">
+    <div class="hero-tag">Founded 1593</div>
+    <div class="hero-tag">French · English · Chinese</div>
+    <div class="hero-tag">Physical & digital formats</div>
+  </div>
+</div>
+
+<main>
+
+  <div class="section-header">
+    <div class="section-title">
+      <span>Botanical panels</span>
+      Plant collection
+    </div>
+    <div class="panel-count">2 panels available · 2 coming soon</div>
+  </div>
+
+  <div class="panels-grid">
+
+    <!-- PANEL 1 -->
+    <div class="panel-card" id="card-1">
+      <div class="panel-header" onclick="toggleCard('card-1')">
+        <div>
+          <div class="panel-number">Panel 01</div>
+          <div class="panel-name">Parrotia persica</div>
+          <div class="panel-common">Persian Ironwood</div>
+          <div class="panel-location">Jardin des Plantes de Montpellier</div>
+        </div>
+        <div class="panel-toggle">+</div>
+      </div>
+      <div class="panel-body">
+        <div class="physical-note">
+          The physical panel is installed on-site at the Jardin des Plantes de Montpellier. The French version is available in situ. Digital versions in English and Chinese are available below, along with their associated reports deposited on HAL.
+        </div>
+        <div class="versions-title">Available versions</div>
+        <div class="versions-grid">
+          <div class="version-card">
+            <div class="version-lang">
+              <span class="lang-badge fr">FR</span>
+              <span class="version-label">Français — physical panel</span>
+            </div>
+            <div class="version-links">
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">📄</span> PDF — à venir
+              </a>
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">🔗</span> HAL — à déposer
+              </a>
+            </div>
+          </div>
+          <div class="version-card">
+            <div class="version-lang">
+              <span class="lang-badge en">EN</span>
+              <span class="version-label">English — digital</span>
+            </div>
+            <div class="version-links">
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">📄</span> PDF — to add
+              </a>
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">🔗</span> HAL DOI — to add
+              </a>
+            </div>
+          </div>
+          <div class="version-card">
+            <div class="version-lang">
+              <span class="lang-badge cn">中文</span>
+              <span class="version-label">Chinese — digital</span>
+            </div>
+            <div class="version-links">
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">📄</span> PDF — to add
+              </a>
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">🔗</span> HAL DOI — to add
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2 -->
+    <div class="panel-card" id="card-2">
+      <div class="panel-header" onclick="toggleCard('card-2')">
+        <div>
+          <div class="panel-number">Panel 02</div>
+          <div class="panel-name">Citrus trifoliata</div>
+          <div class="panel-common">Hardy Orange / Trifoliate Orange</div>
+          <div class="panel-location">Jardin des Plantes de Montpellier</div>
+        </div>
+        <div class="panel-toggle">+</div>
+      </div>
+      <div class="panel-body">
+        <div class="physical-note">
+          The physical panel is installed on-site at the Jardin des Plantes de Montpellier. The French version is available in situ. Digital versions in English and Chinese are available below, along with their associated reports deposited on HAL.
+        </div>
+        <div class="versions-title">Available versions</div>
+        <div class="versions-grid">
+          <div class="version-card">
+            <div class="version-lang">
+              <span class="lang-badge fr">FR</span>
+              <span class="version-label">Français — physical panel</span>
+            </div>
+            <div class="version-links">
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">📄</span> PDF — à venir
+              </a>
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">🔗</span> HAL — à déposer
+              </a>
+            </div>
+          </div>
+          <div class="version-card">
+            <div class="version-lang">
+              <span class="lang-badge en">EN</span>
+              <span class="version-label">English — digital</span>
+            </div>
+            <div class="version-links">
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">📄</span> PDF — to add
+              </a>
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">🔗</span> HAL DOI — to add
+              </a>
+            </div>
+          </div>
+          <div class="version-card">
+            <div class="version-lang">
+              <span class="lang-badge cn">中文</span>
+              <span class="version-label">Chinese — digital</span>
+            </div>
+            <div class="version-links">
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">📄</span> PDF — to add
+              </a>
+              <a href="#" class="version-link placeholder">
+                <span class="link-icon">🔗</span> HAL DOI — to add
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMING SOON -->
+  <div class="coming-soon-title">Coming soon</div>
+  <div class="coming-soon-grid">
+    <div class="coming-card">
+      <div class="coming-dot"></div>
+      <div class="coming-text">Panel 03 — title to be confirmed</div>
+    </div>
+    <div class="coming-card">
+      <div class="coming-dot"></div>
+      <div class="coming-text">Panel 04 — title to be confirmed</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Artemis Anest — Research · Teaching · Outreach &nbsp;·&nbsp;
+  <a href="#">HAL profile</a> &nbsp;·&nbsp;
+  <a href="#">ORCID</a>
+</footer>
+
+<script>
+  function toggleCard(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
