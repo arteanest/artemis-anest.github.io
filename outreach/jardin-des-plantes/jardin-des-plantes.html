@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jardin des Plantes de Montpellier — Artemis Anest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0a2a2e; --mid: #0e6b6b; --light: #2ec4b6; --pale: #d0f5f2;
+    --cream: #f4fafa; --sand: #d6ecea; --text: #0d2626; --muted: #3a7a78; --accent: #0e9e96;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  /* NAV */
+  nav { background: var(--deep); padding: .9rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .nav-name { font-family: 'Playfair Display', serif; color: var(--pale); font-size: 1rem; letter-spacing: .02em; white-space: nowrap; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { color: var(--light); text-decoration: none; font-size: .8rem; font-weight: 300; letter-spacing: .08em; text-transform: uppercase; transition: color .2s; }
+  .nav-links a:hover { color: #fff; }
+  .breadcrumb-bar { background: var(--deep); padding: 0 2rem .9rem; font-size: .72rem; color: var(--light); letter-spacing: .08em; text-transform: uppercase; opacity: .6; }
+  .breadcrumb-bar span { opacity: .5; margin: 0 .4rem; }
+
+  /* LANG */
+  .lang-bar { background: var(--deep); border-top: 1px solid rgba(46,196,182,.15); padding: .75rem 2rem; display: flex; align-items: center; gap: .75rem; }
+  .lang-label { font-size: .7rem; color: rgba(208,245,242,.4); letter-spacing: .1em; text-transform: uppercase; margin-right: .5rem; }
+  .lang-btn { padding: .45rem 1.2rem; border-radius: 20px; border: 1px solid rgba(46,196,182,.3); background: transparent; color: var(--light); font-size: .9rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s; }
+  .lang-btn:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
+  .lang-btn.active { background: var(--light); color: var(--deep); border-color: var(--light); font-weight: 500; }
+  .lang-btn[data-lang="cn"] { font-size: 1rem; }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 4rem 2rem 3.5rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(46,196,182,.1); }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: 5%; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(46,196,182,.07); }
+  .hero-inner { position: relative; max-width: 760px; }
+  .hero-eyebrow { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .6; margin-bottom: .75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); color: #fff; font-weight: 400; line-height: 1.15; }
+  .hero h1 em { font-style: italic; color: var(--light); }
+  .hero-sub { margin-top: 1rem; font-size: .88rem; font-weight: 300; color: rgba(208,245,242,.6); line-height: 1.7; max-width: 520px; }
+  .hero-meta { margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+  .hero-stat { }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--light); font-weight: 400; line-height: 1; }
+  .hero-stat-label { font-size: .72rem; color: rgba(208,245,242,.45); letter-spacing: .08em; text-transform: uppercase; margin-top: .3rem; }
+
+  /* ARTICLE */
+  article { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 5rem; }
+
+  /* SECTION INTRO */
+  .section-eyebrow { font-size: .68rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; color: var(--deep); margin-bottom: 1rem; line-height: 1.3; }
+  h2 em { font-style: italic; }
+  p { font-size: .93rem; line-height: 1.85; color: var(--text); font-weight: 300; margin-bottom: 1.25rem; }
+  p:last-child { margin-bottom: 0; }
+
+  /* PHOTO BLOCKS */
+  .photo-block { margin: 3rem 0; }
+  .photo-block.right { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+  .photo-block.left { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; direction: rtl; }
+  .photo-block.left > * { direction: ltr; }
+  .photo-block.full { }
+  .photo-wrap { border-radius: 10px; overflow: hidden; background: var(--sand); aspect-ratio: 4/3; position: relative; }
+  .photo-wrap.tall { aspect-ratio: 3/4; }
+  .photo-wrap.wide { aspect-ratio: 16/9; }
+  .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+  .photo-wrap:hover img { transform: scale(1.03); }
+  .photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem; color: var(--muted); }
+  .photo-placeholder-icon { font-size: 2.5rem; opacity: .25; }
+  .photo-placeholder-name { font-size: .75rem; font-family: monospace; opacity: .5; }
+  .photo-caption { font-size: .72rem; color: var(--muted); margin-top: .6rem; font-style: italic; font-weight: 300; }
+  .photo-text { }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--sand); margin: 3rem 0; }
+
+  /* PANELS GRID */
+  .panels-section { margin-top: 4rem; }
+  .panels-section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--sand); }
+  .panels-section-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--deep); }
+  .panels-section-title span { display: block; font-family: 'DM Sans', sans-serif; font-size: .68rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+  .panels-count { font-size: .78rem; color: var(--muted); font-weight: 300; }
+  .panels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .panel-card { background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; transition: all .2s; }
+  .panel-card:hover { box-shadow: 0 6px 24px rgba(10,42,46,.08); transform: translateY(-2px); border-color: var(--light); }
+  .panel-num { font-size: .68rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+  .panel-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-style: italic; color: var(--deep); margin-bottom: .3rem; }
+  .panel-common { font-size: .8rem; color: var(--muted); font-weight: 300; margin-bottom: 1rem; }
+  .panel-langs { display: flex; gap: .4rem; }
+  .lang-dot { font-size: .65rem; font-weight: 500; padding: 2px 7px; border-radius: 3px; }
+  .lang-dot.fr { background: #e8f0fe; color: #1a47a3; }
+  .lang-dot.en { background: #fff3e0; color: #b85c00; }
+  .lang-dot.cn { background: #f3e8ff; color: #6b21a8; }
+
+  /* COMING SOON */
+  .coming-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .coming-card { border: 1px dashed var(--sand); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; gap: .75rem; }
+  .coming-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sand); flex-shrink: 0; }
+  .coming-text { font-size: .8rem; color: var(--muted); font-style: italic; font-weight: 300; }
+  .coming-label { font-size: .68rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 2rem; margin-bottom: .75rem; }
+
+  /* LANG HIDE */
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+
+  footer { background: var(--deep); padding: 1.75rem 2rem; text-align: center; color: rgba(208,245,242,.35); font-size: .75rem; font-weight: 300; letter-spacing: .05em; }
+  footer a { color: var(--light); text-decoration: none; opacity: .7; }
+
+  @media(max-width: 680px) {
+    .photo-block.right, .photo-block.left { grid-template-columns: 1fr; direction: ltr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-name">Artemis Anest</div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Research</a></li>
+    <li><a href="#">Teaching</a></li>
+    <li><a href="#">Outreach</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="breadcrumb-bar">
+  Outreach <span>›</span> SEED-ED <span>›</span> Jardin des Plantes de Montpellier
+</div>
+
+<div class="lang-bar">
+  <span class="lang-label">Lang</span>
+  <button class="lang-btn active" data-lang-btn="fr" onclick="switchLang('fr')">Français</button>
+  <button class="lang-btn" data-lang-btn="en" onclick="switchLang('en')">English</button>
+  <button class="lang-btn" data-lang-btn="cn" onclick="switchLang('cn')">中文</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">SEED-ED · Outreach</div>
+    <h1 data-lang="fr" class="visible">Jardin des Plantes<br><em>de Montpellier</em></h1>
+    <h1 data-lang="en">Jardin des Plantes<br><em>de Montpellier</em></h1>
+    <h1 data-lang="cn">蒙彼利埃<br><em>植物园</em></h1>
+    <p class="hero-sub" data-lang="fr" class="visible">Le plus ancien jardin botanique de France, fondé en 1593. Un lieu vivant où la science rencontre le grand public, et où nos étudiants apprennent la botanique et l'architecture végétale, tout en apprenant à diffuser leurs savoirs.</p>
+    <p class="hero-sub" data-lang="en">The oldest botanical garden in France, founded in 1593. A living place where science meets the public, and where our students learn botany and plant architecture, while also learning to share their knowledge.</p>
+    <p class="hero-sub" data-lang="cn">法国最古老的植物园，建于1593年。一个科学与公众相遇的地方，我们的学生在这里学习植物学和植物建筑学，同时学习传播他们的知识。</p>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <div class="hero-stat-num">1593</div>
+        <div class="hero-stat-label" data-lang="fr" class="visible">Fondation</div>
+        <div class="hero-stat-label" data-lang="en">Founded</div>
+        <div class="hero-stat-label" data-lang="cn">建立年份</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2</div>
+        <div class="hero-stat-label" data-lang="fr" class="visible">Panneaux installés</div>
+        <div class="hero-stat-label" data-lang="en">Panels installed</div>
+        <div class="hero-stat-label" data-lang="cn">已安装展示板</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label" data-lang="fr" class="visible">Langues</div>
+        <div class="hero-stat-label" data-lang="en">Languages</div>
+        <div class="hero-stat-label" data-lang="cn">语言</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE FR -->
+<article data-lang="fr" class="visible">
+
+  <div class="section-eyebrow">Le lieu</div>
+  <h2>Le plus ancien jardin botanique de <em>France</em></h2>
+  <p>Fondé en 1593 par le roi Henri IV sur l'initiative du médecin Pierre Richer de Belleval, le Jardin des Plantes de Montpellier est le plus ancien jardin botanique de France encore en activité. Conçu à l'origine pour la culture de plantes médicinales destinées à l'enseignement de la médecine, il a progressivement évolué pour devenir un espace scientifique, pédagogique et culturel ouvert à tous.</p>
+
+  <!-- PHOTO 1 — full width -->
+  <div class="photo-block full" style="margin:2.5rem 0">
+    <div class="photo-wrap wide">
+      <img src="imgs/photo_jdp_1.jpg" alt="Jardin des Plantes de Montpellier" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>🌿</div><div class=\'photo-placeholder-name\'>photo_jdp_1.jpg</div></div>'">
+    </div>
+    <p class="photo-caption">Vue générale du Jardin des Plantes de Montpellier</p>
+  </div>
+
+  <p>Classé monument historique, il accueille aujourd'hui des collections botaniques exceptionnelles : plantes méditerranéennes, tropicales et alpines, et constitue un lieu de recherche, d'enseignement et de promenade pour les habitants de Montpellier et ses visiteurs.</p>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Enseignement &amp; projet européen</div>
+  <h2>Une <em>L3 Biologie-Écologie</em> qui dépasse les murs de l'université</h2>
+  <p>Dans le cadre de la <a href="https://biosoc.edu.umontpellier.fr/licences/licence-biologie-ecologie/" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(14,158,150,0.3)">Licence Biologie-Écologie de l'Université de Montpellier</a>, les étudiants de L3 suivent l'UE d'Architecture Végétale. Ils y apprennent par la recherche et par problème, en choisissant librement leur angle scientifique : conservation des espèces, écologie urbaine, One Health ou biogéographie.</p>
+  <p>Les meilleurs travaux étudiants prennent une forme concrète et durable grâce au projet SEED-ED, financé par <strong>CHARM-EU</strong>, une alliance interuniversitaire européenne. Ce financement permet la production et l'installation de panneaux physiques multilingues, exposés en permanence au Jardin des Plantes de Montpellier.</p>
+
+  <!-- PHOTO 2 — right -->
+  <div class="photo-block right">
+    <div class="photo-text">
+      <p>Chaque panneau est le fruit d'un travail de recherche original. Les étudiants choisissent une espèce présente dans le jardin, formulent une problématique scientifique, conduisent leur analyse et rédigent un contenu accessible au grand public en trois langues.</p>
+      <p>Le panneau physique est installé à proximité de l'espèce. Les versions numériques, accompagnées du rapport de recherche déposé sur HAL, sont accessibles via QR code.</p>
+      <p style="margin-top:1.25rem"><a href="#panneaux" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;padding:.55rem 1.2rem;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:500;transition:background .2s" onmouseover="this.style.background='#0e6b6b'" onmouseout="this.style.background='var(--accent)'">🌿 Découvrir leurs travaux</a></p>
+    </div>
+    <div>
+      <div class="photo-wrap tall">
+        <img src="imgs/photo_jdp_2.jpg" alt="Panneau SEED-ED" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>📋</div><div class=\'photo-placeholder-name\'>photo_jdp_2.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">Panneau SEED-ED installé dans le jardin</p>
+    </div>
+  </div>
+
+  <!-- PHOTO 3 — full -->
+  <div class="photo-block full" style="margin:2.5rem 0">
+    <div class="photo-wrap wide">
+      <img src="imgs/photo_jdp_3.jpg" alt="Étudiants au jardin" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>👩‍🎓</div><div class=\'photo-placeholder-name\'>photo_jdp_3.jpg</div></div>'">
+    </div>
+    <p class="photo-caption">Étudiants en travaux pratiques au Jardin des Plantes</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Science ouverte</div>
+  <h2>Des savoirs accessibles en <em>trois langues</em></h2>
+  <p>Chaque panneau est disponible en français, en anglais et en chinois, trois langues choisies pour refléter la diversité des visiteurs du jardin et la vocation internationale de la recherche. Le contenu scientifique est adapté pour être compréhensible par tous, sans sacrifier la rigueur.</p>
+
+  <!-- PHOTO 4 — right -->
+  <div class="photo-block right">
+    <div class="photo-text">
+      <p>Les rapports de recherche associés à chaque panneau sont déposés sur la plateforme HAL, archive ouverte nationale, et reçoivent un identifiant DOI permanent. Ils sont accessibles librement, en complément du panneau, pour les lecteurs souhaitant approfondir le sujet.</p>
+      <p>Ce dispositif fait du Jardin des Plantes un espace de diffusion scientifique vivant, où chaque visite peut devenir une expérience d'apprentissage, pour les promeneurs comme pour les chercheurs.</p>
+    </div>
+    <div>
+      <div class="photo-wrap">
+        <img src="imgs/photo_jdp_4.jpg" alt="QR code panneau" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>📱</div><div class=\'photo-placeholder-name\'>photo_jdp_4.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">Accès numérique via QR code</p>
+    </div>
+  </div>
+
+</article>
+
+<!-- ARTICLE EN -->
+<article data-lang="en">
+
+  <div class="section-eyebrow">The place</div>
+  <h2>The oldest botanical garden in <em>France</em></h2>
+  <p>Founded in 1593 by King Henry IV on the initiative of physician Pierre Richer de Belleval, the Jardin des Plantes de Montpellier is the oldest botanical garden in France still in operation. Originally designed for the cultivation of medicinal plants for medical education, it has progressively evolved into a scientific, educational and cultural space open to all.</p>
+
+  <div class="photo-block full" style="margin:2.5rem 0">
+    <div class="photo-wrap wide">
+      <img src="imgs/photo_jdp_1.jpg" alt="Jardin des Plantes de Montpellier" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>🌿</div><div class=\'photo-placeholder-name\'>photo_jdp_1.jpg</div></div>'">
+    </div>
+    <p class="photo-caption">General view of the Jardin des Plantes de Montpellier</p>
+  </div>
+
+  <p>Listed as a historic monument, it now hosts exceptional botanical collections: Mediterranean, tropical and alpine plants, serving as a place of research, teaching and leisure for the people of Montpellier and its visitors.</p>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Teaching &amp; European project</div>
+  <h2>A <em>Biology-Ecology Bachelor's</em> that goes beyond the classroom</h2>
+  <p>Within the <a href="https://biosoc.edu.umontpellier.fr/licences/licence-biologie-ecologie/" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(14,158,150,0.3)">Biology-Ecology Bachelor's programme at the University of Montpellier</a>, third-year students take the Plant Architecture course. They learn through research and problem-based approaches, freely choosing their own scientific angle: species conservation, urban ecology, One Health or biogeography.</p>
+  <p>The best student projects take a concrete and lasting form through the SEED-ED project, funded by <strong>CHARM-EU</strong>, a European interuniversity alliance. This funding supports the production and installation of physical multilingual panels, permanently displayed at the Jardin des Plantes de Montpellier.</p>
+
+  <div class="photo-block right">
+    <div class="photo-text">
+      <p>Each panel is the result of original research. Students choose a species present in the garden, formulate a scientific question, conduct their analysis and write content accessible to the general public in three languages.</p>
+      <p>The physical panel is installed near the species. Digital versions, along with the research report deposited on HAL, are accessible via QR code.</p>
+      <p style="margin-top:1.25rem"><a href="#panneaux" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;padding:.55rem 1.2rem;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:500;transition:background .2s" onmouseover="this.style.background='#0e6b6b'" onmouseout="this.style.background='var(--accent)'">🌿 Discover their work</a></p>
+    </div>
+    <div>
+      <div class="photo-wrap tall">
+        <img src="imgs/photo_jdp_2.jpg" alt="SEED-ED panel" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>📋</div><div class=\'photo-placeholder-name\'>photo_jdp_2.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">SEED-ED panel installed in the garden</p>
+    </div>
+  </div>
+
+  <div class="photo-block full" style="margin:2.5rem 0">
+    <div class="photo-wrap wide">
+      <img src="imgs/photo_jdp_3.jpg" alt="Students in the garden" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>👩‍🎓</div><div class=\'photo-placeholder-name\'>photo_jdp_3.jpg</div></div>'">
+    </div>
+    <p class="photo-caption">Students during field work at the Jardin des Plantes</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Open science</div>
+  <h2>Knowledge accessible in <em>three languages</em></h2>
+  <p>Each panel is available in French, English and Chinese, three languages chosen to reflect the diversity of the garden's visitors and the international nature of research. The scientific content is adapted to be understandable by all, without sacrificing rigour.</p>
+
+  <div class="photo-block right">
+    <div class="photo-text">
+      <p>The research reports associated with each panel are deposited on the HAL platform, France's national open archive, and receive a permanent DOI identifier. They are freely accessible, alongside the panel, for readers wishing to explore the topic further.</p>
+      <p>This system turns the Jardin des Plantes into a living scientific dissemination space, where every visit can become a learning experience, for strollers and researchers alike.</p>
+    </div>
+    <div>
+      <div class="photo-wrap">
+        <img src="imgs/photo_jdp_4.jpg" alt="QR code panel" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>📱</div><div class=\'photo-placeholder-name\'>photo_jdp_4.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">Digital access via QR code</p>
+    </div>
+  </div>
+
+</article>
+
+<!-- ARTICLE CN -->
+<article data-lang="cn">
+
+  <div class="section-eyebrow">地点介绍</div>
+  <h2>法国最古老的<em>植物园</em></h2>
+  <p>蒙彼利埃植物园由亨利四世国王于1593年在医生皮埃尔·里歇·德·贝拉瓦尔的倡议下建立，是法国现存最古老的植物园。最初为医学教育种植药用植物，后逐渐发展成为向所有人开放的科学、教育和文化空间。</p>
+
+  <div class="photo-block full" style="margin:2.5rem 0">
+    <div class="photo-wrap wide">
+      <img src="imgs/photo_jdp_1.jpg" alt="蒙彼利埃植物园" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>🌿</div><div class=\'photo-placeholder-name\'>photo_jdp_1.jpg</div></div>'">
+    </div>
+    <p class="photo-caption">蒙彼利埃植物园全景</p>
+  </div>
+
+  <p>该园被列为历史古迹，现收藏有地中海、热带和高山植物等珍贵植物标本，是蒙彼利埃市民和游客研究、学习和休闲的场所。</p>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">教学与欧洲项目</div>
+  <h2>一个<em>走出校园</em>的生物生态学学士课程</h2>
+  <p>在<a href="https://biosoc.edu.umontpellier.fr/licences/licence-biologie-ecologie/" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(14,158,150,0.3)">蒙彼利埃大学生物生态学学士课程</a>中，三年级学生选修植物建筑学课程。他们通过研究和问题导向的方式学习，自由选择自己的科学角度：物种保护、城市生态、同一健康或生物地理学。</p>
+  <p>优秀的学生作品通过SEED-ED项目获得具体而持久的呈现形式，该项目由欧洲大学联盟<strong>CHARM-EU</strong>资助，支持多语言实体展示板的制作与安装，永久陈列于蒙彼利埃植物园。</p>
+
+  <div class="photo-block right">
+    <div class="photo-text">
+      <p>每块展示板都是原创研究的成果。学生选择园中的一个物种，提出科学问题，进行分析，并用三种语言撰写面向公众的内容。</p>
+      <p>实体展示板安装在该物种附近。数字版本及存档于HAL的研究报告可通过二维码获取。</p>
+      <p style="margin-top:1.25rem"><a href="#panneaux" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;padding:.55rem 1.2rem;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:500" onmouseover="this.style.background='#0e6b6b'" onmouseout="this.style.background='var(--accent)'">🌿 浏览他们的成果</a></p>
+    </div>
+    <div>
+      <div class="photo-wrap tall">
+        <img src="imgs/photo_jdp_2.jpg" alt="SEED-ED展示板" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>📋</div><div class=\'photo-placeholder-name\'>photo_jdp_2.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">安装在园中的SEED-ED展示板</p>
+    </div>
+  </div>
+
+  <div class="photo-block full" style="margin:2.5rem 0">
+    <div class="photo-wrap wide">
+      <img src="imgs/photo_jdp_3.jpg" alt="学生在植物园" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>👩‍🎓</div><div class=\'photo-placeholder-name\'>photo_jdp_3.jpg</div></div>'">
+    </div>
+    <p class="photo-caption">学生在植物园进行实地研究</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">开放科学</div>
+  <h2>以<em>三种语言</em>传播知识</h2>
+  <p>每块展示板提供法语、英语和中文三种语言版本，以反映植物园参观者的多样性和科研的国际化特点。科学内容经过调整，力求人人可读，同时不失严谨。</p>
+
+  <div class="photo-block right">
+    <div class="photo-text">
+      <p>与每块展示板相关的研究报告存档于法国国家开放档案库HAL，并获得永久DOI标识符，供希望深入了解该主题的读者免费获取。</p>
+      <p>这一机制使植物园成为一个充满活力的科学传播空间，每次参观都可以成为一次学习体验，无论对于漫步者还是研究人员。</p>
+    </div>
+    <div>
+      <div class="photo-wrap">
+        <img src="imgs/photo_jdp_4.jpg" alt="二维码" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>📱</div><div class=\'photo-placeholder-name\'>photo_jdp_4.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">通过二维码获取数字内容</p>
+    </div>
+  </div>
+
+</article>
+
+<!-- PANELS SECTION (always visible, lang-switched inside) -->
+<div id="panneaux" style="max-width:780px;margin:0 auto;padding:0 2rem 5rem">
+  <div class="panels-section">
+    <div class="panels-section-header">
+      <div class="panels-section-title">
+        <span data-lang="fr" class="visible">Panneaux disponibles</span>
+        <span data-lang="en">Available panels</span>
+        <span data-lang="cn">可用展示板</span>
+        <span class="panels-section-title" style="font-size:1.3rem">Collection</span>
+      </div>
+      <div class="panels-count">
+        <span data-lang="fr" class="visible">2 panneaux · 2 à venir</span>
+        <span data-lang="en">2 panels · 2 coming soon</span>
+        <span data-lang="cn">2块展示板 · 2块即将推出</span>
+      </div>
+    </div>
+
+    <div class="panels-grid">
+      <a href="parrotia-persica/parrotia-persica.html" class="panel-card">
+        <div class="panel-num">Panel 01</div>
+        <div class="panel-name">Parrotia persica</div>
+        <div class="panel-common">
+          <span data-lang="fr" class="visible">Fer de Perse · Parrotie de Perse</span>
+          <span data-lang="en">Persian Ironwood</span>
+          <span data-lang="cn">波斯铁木</span>
+        </div>
+        <div class="panel-langs">
+          <span class="lang-dot fr">FR</span>
+          <span class="lang-dot en">EN</span>
+          <span class="lang-dot cn">中文</span>
+        </div>
+      </a>
+      <a href="citrus-trifoliata/citrus-trifoliata.html" class="panel-card">
+        <div class="panel-num">Panel 02</div>
+        <div class="panel-name">Citrus trifoliata</div>
+        <div class="panel-common">
+          <span data-lang="fr" class="visible">Oranger des osages · Citrus trifolié</span>
+          <span data-lang="en">Hardy Orange · Trifoliate Orange</span>
+          <span data-lang="cn">枳壳</span>
+        </div>
+        <div class="panel-langs">
+          <span class="lang-dot fr">FR</span>
+          <span class="lang-dot en">EN</span>
+          <span class="lang-dot cn">中文</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="coming-label">
+      <span data-lang="fr" class="visible">Prochainement</span>
+      <span data-lang="en">Coming soon</span>
+      <span data-lang="cn">即将推出</span>
+    </div>
+    <div class="coming-grid">
+      <div class="coming-card">
+        <div class="coming-dot"></div>
+        <div class="coming-text">
+          <span data-lang="fr" class="visible">Panneau 03, à confirmer</span>
+          <span data-lang="en">Panel 03, to be confirmed</span>
+          <span data-lang="cn">展示板03，待确认</span>
+        </div>
+      </div>
+      <div class="coming-card">
+        <div class="coming-dot"></div>
+        <div class="coming-text">
+          <span data-lang="fr" class="visible">Panneau 04, à confirmer</span>
+          <span data-lang="en">Panel 04, to be confirmed</span>
+          <span data-lang="cn">展示板04，待确认</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Artemis Anest · Research · Teaching · Outreach &nbsp;·&nbsp;
+  <a href="#">HAL</a> &nbsp;·&nbsp; <a href="#">ORCID</a>
+</footer>
+
+<script>
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.langBtn === lang)
+    );
+    document.documentElement.lang = lang === 'cn' ? 'zh' : lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+  }
+  switchLang('fr');
+</script>
+</body>
+</html>
