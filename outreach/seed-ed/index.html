@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEED-ED - Artemis Anest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0a2a2e; --mid: #0e6b6b; --light: #2ec4b6; --pale: #d0f5f2;
+    --cream: #f4fafa; --sand: #d6ecea; --text: #0d2626; --muted: #3a7a78; --accent: #0e9e96;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  /* NAV */
+  nav { background: var(--deep); padding: .9rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .nav-name { font-family: 'Playfair Display', serif; color: var(--pale); font-size: 1rem; letter-spacing: .02em; white-space: nowrap; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { color: var(--light); text-decoration: none; font-size: .8rem; font-weight: 300; letter-spacing: .08em; text-transform: uppercase; transition: color .2s; }
+  .nav-links a:hover { color: #fff; }
+  .breadcrumb-bar { background: var(--deep); padding: 0 2rem .9rem; font-size: .72rem; color: var(--light); letter-spacing: .08em; text-transform: uppercase; opacity: .6; }
+  .breadcrumb-bar span { opacity: .5; margin: 0 .4rem; }
+  .breadcrumb-bar a { color: inherit; text-decoration: none; }
+
+  /* LANG */
+  .lang-bar { background: var(--deep); border-top: 1px solid rgba(46,196,182,.15); padding: .75rem 2rem; display: flex; align-items: center; gap: .75rem; }
+  .lang-label { font-size: .7rem; color: rgba(208,245,242,.4); letter-spacing: .1em; text-transform: uppercase; margin-right: .5rem; }
+  .lang-btn { padding: .45rem 1.2rem; border-radius: 20px; border: 1px solid rgba(46,196,182,.3); background: transparent; color: var(--light); font-size: .9rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s; }
+  .lang-btn:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
+  .lang-btn.active { background: var(--light); color: var(--deep); border-color: var(--light); font-weight: 500; }
+  .lang-btn[data-lang-btn="cn"] { font-size: 1rem; }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 3.5rem 2rem 3rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(46,196,182,.1); }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: 5%; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(46,196,182,.07); }
+  .hero-inner { position: relative; max-width: 900px; display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center; }
+  .hero-logo { width: 140px; flex-shrink: 0; }
+  .hero-logo img { width: 100%; filter: brightness(0) invert(1); opacity: .92; }
+  .hero-eyebrow { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .6; margin-bottom: .75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; font-weight: 400; line-height: 1.15; }
+  .hero h1 em { font-style: italic; color: var(--light); }
+  .hero-sub { margin-top: 1rem; font-size: .88rem; font-weight: 300; color: rgba(208,245,242,.6); line-height: 1.7; max-width: 560px; }
+  .hero-meta { margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--light); font-weight: 400; line-height: 1; }
+  .hero-stat-label { font-size: .72rem; color: rgba(208,245,242,.45); letter-spacing: .08em; text-transform: uppercase; margin-top: .3rem; }
+
+  /* LOGO BAND */
+  .logo-band { background: #fff; border-bottom: 1px solid var(--sand); padding: 1.1rem 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .logo-band-label { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  .logo-items { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+  .logo-item { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-decoration: none; }
+  .logo-box { height: 36px; display: flex; align-items: center; }
+  .logo-name { font-size: .63rem; color: var(--muted); font-weight: 400; letter-spacing: .04em; text-align: center; }
+  .charm-badge { padding: .3rem .55rem; border-radius: 5px; background: linear-gradient(135deg, #1a3a8f, #2e6fc4); color: #fff; font-size: .6rem; font-weight: 700; letter-spacing: .04em; line-height: 1.3; text-align: center; }
+  .um-badge { width: 34px; height: 34px; border-radius: 50%; background: #c8102e; display: flex; align-items: center; justify-content: center; color: #fff; font-size: .6rem; font-weight: 700; }
+  .tcd-badge { width: 34px; height: 34px; border-radius: 50%; background: #003d8f; display: flex; align-items: center; justify-content: center; color: #fff; font-size: .52rem; font-weight: 700; }
+  .xtbg-badge { width: 34px; height: 34px; border-radius: 50%; background: #2d7a2d; display: flex; align-items: center; justify-content: center; color: #fff; font-size: .52rem; font-weight: 700; }
+  .logo-divider { width: 1px; height: 28px; background: var(--sand); }
+
+  /* ARTICLE */
+  article { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 2rem; }
+  .section-eyebrow { font-size: .68rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; color: var(--deep); margin-bottom: 1rem; line-height: 1.3; }
+  h2 em { font-style: italic; }
+  p { font-size: .93rem; line-height: 1.85; color: var(--text); font-weight: 300; margin-bottom: 1.25rem; }
+  p:last-child { margin-bottom: 0; }
+  a.inline-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(14,158,150,0.3); }
+  a.inline-link:hover { border-bottom-color: var(--accent); }
+
+  /* ATBC HIGHLIGHT BANNER */
+  .atbc-banner { background: linear-gradient(135deg, #0a2a2e 0%, #0e3d3d 100%); border: 1px solid rgba(46,196,182,.25); border-radius: 12px; padding: 2rem; margin: 2.5rem 0; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start; }
+  .atbc-flag { font-size: .65rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .7; margin-bottom: .5rem; }
+  .atbc-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #fff; font-weight: 400; margin-bottom: .5rem; line-height: 1.3; }
+  .atbc-desc { font-size: .83rem; font-weight: 300; color: rgba(208,245,242,.65); line-height: 1.7; }
+  .atbc-stats { display: flex; gap: 1.5rem; margin-top: 1.25rem; flex-wrap: wrap; }
+  .atbc-stat { }
+  .atbc-stat-num { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--light); line-height: 1; }
+  .atbc-stat-label { font-size: .68rem; color: rgba(208,245,242,.4); letter-spacing: .08em; text-transform: uppercase; margin-top: .2rem; }
+  .atbc-badge { background: rgba(46,196,182,.12); border: 1px solid rgba(46,196,182,.25); border-radius: 8px; padding: 1rem 1.25rem; text-align: center; min-width: 110px; flex-shrink: 0; }
+  .atbc-badge-logo { font-size: 1.8rem; margin-bottom: .4rem; }
+  .atbc-badge-text { font-size: .72rem; color: rgba(208,245,242,.6); font-weight: 300; line-height: 1.4; }
+  .atbc-badge-year { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--light); display: block; margin-bottom: .2rem; }
+
+  /* OBJECTIVES GRID */
+  .obj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.1rem; margin: 2rem 0; }
+  .obj-card { background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1.4rem; }
+  .obj-icon { font-size: 1.5rem; margin-bottom: .6rem; }
+  .obj-title { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 600; color: var(--deep); margin-bottom: .4rem; }
+  .obj-text { font-size: .82rem; line-height: 1.65; color: var(--muted); font-weight: 300; }
+
+  /* TIMELINE */
+  .timeline { margin: 2rem 0; position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 80px; top: 0; bottom: 0; width: 1px; background: var(--sand); }
+  .tl-item { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; margin-bottom: 1.75rem; align-items: start; }
+  .tl-year { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent); font-weight: 400; text-align: right; padding-top: .15rem; padding-right: 1rem; position: relative; }
+  .tl-year::after { content: ''; position: absolute; right: -5px; top: .45rem; width: 9px; height: 9px; border-radius: 50%; background: var(--light); border: 2px solid var(--cream); }
+  .tl-body { padding-left: 1rem; }
+  .tl-title { font-weight: 500; font-size: .9rem; color: var(--deep); margin-bottom: .3rem; }
+  .tl-desc { font-size: .83rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
+  .tl-tag { display: inline-block; font-size: .63rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; background: var(--pale); color: var(--mid); margin-left: .5rem; vertical-align: middle; }
+
+  /* PHOTO BLOCKS */
+  .photo-block { margin: 3rem 0; }
+  .photo-block.full { }
+  .photo-block.right { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+  .photo-wrap { border-radius: 10px; overflow: hidden; background: var(--sand); aspect-ratio: 4/3; }
+  .photo-wrap.wide { aspect-ratio: 16/9; }
+  .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+  .photo-wrap:hover img { transform: scale(1.03); }
+  .photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem; color: var(--muted); }
+  .photo-placeholder-icon { font-size: 2.5rem; opacity: .25; }
+  .photo-placeholder-name { font-size: .75rem; font-family: monospace; opacity: .5; }
+  .photo-caption { font-size: .72rem; color: var(--muted); margin-top: .6rem; font-style: italic; font-weight: 300; }
+
+  /* PARTNERS */
+  .partners-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.1rem; margin: 1.5rem 0; }
+  .partner-card { background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1.25rem; }
+  .partner-badge-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; }
+  .partner-name { font-weight: 500; font-size: .88rem; color: var(--deep); }
+  .partner-role { font-size: .78rem; color: var(--muted); font-weight: 300; line-height: 1.5; }
+
+  /* WEBINAR BANNER */
+  .webinar-banner { background: var(--deep); border-radius: 12px; padding: 1.75rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin: 2.5rem 0; }
+  .webinar-label { font-size: .68rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .7; margin-bottom: .4rem; }
+  .webinar-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: #fff; font-weight: 400; margin-bottom: .3rem; }
+  .webinar-date { font-size: .82rem; color: rgba(208,245,242,.6); font-weight: 300; }
+  .webinar-link { display: inline-flex; align-items: center; gap: .4rem; background: var(--light); color: var(--deep); padding: .55rem 1.25rem; border-radius: 6px; text-decoration: none; font-size: .82rem; font-weight: 500; white-space: nowrap; transition: background .2s; }
+  .webinar-link:hover { background: #fff; }
+
+  /* SITES */
+  .sites-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
+  .site-card { background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; transition: all .2s; }
+  .site-card:hover { box-shadow: 0 6px 24px rgba(10,42,46,.08); transform: translateY(-2px); border-color: var(--light); }
+  .site-tag { font-size: .68rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+  .site-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--deep); margin-bottom: .3rem; }
+  .site-desc { font-size: .8rem; color: var(--muted); font-weight: 300; margin-bottom: 1rem; line-height: 1.55; }
+  .panel-dot { font-size: .65rem; font-weight: 500; padding: 2px 7px; border-radius: 3px; background: var(--pale); color: var(--mid); }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--sand); margin: 3rem 0; }
+
+  /* LANG HIDE */
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+
+  footer { background: var(--deep); padding: 1.75rem 2rem; text-align: center; color: rgba(208,245,242,.35); font-size: .75rem; font-weight: 300; letter-spacing: .05em; }
+  footer a { color: var(--light); text-decoration: none; opacity: .7; }
+
+  @media(max-width: 680px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-logo { width: 90px; }
+    .photo-block.right { grid-template-columns: 1fr; }
+    .timeline::before { left: 60px; }
+    .tl-item { grid-template-columns: 60px 1fr; }
+    .atbc-banner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-name">Artemis Anest</div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Research</a></li>
+    <li><a href="#">Teaching</a></li>
+    <li><a href="#">Outreach</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="breadcrumb-bar">
+  <a href="#">Outreach</a> <span>›</span> SEED-ED
+</div>
+
+<div class="lang-bar">
+  <span class="lang-label">Lang</span>
+  <button class="lang-btn active" data-lang-btn="fr" onclick="switchLang('fr')">Français</button>
+  <button class="lang-btn" data-lang-btn="en" onclick="switchLang('en')">English</button>
+  <button class="lang-btn" data-lang-btn="cn" onclick="switchLang('cn')">中文</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-logo">
+      <img src="Logo_SEED_ED.png" alt="SEED-ED logo">
+    </div>
+    <div>
+      <div class="hero-eyebrow">Outreach · CHARM-EU · International</div>
+      <h1 data-lang="fr" class="visible">SEED-ED<br><em>Initiative pédagogique</em></h1>
+      <h1 data-lang="en">SEED-ED<br><em>Educational Initiative</em></h1>
+      <h1 data-lang="cn">SEED-ED<br><em>教育项目</em></h1>
+
+      <p class="hero-sub" data-lang="fr" class="visible">Challenge-based learning from botanical gardens to fossil records: students engaging science with society. Un projet financé par l'alliance CHARM-EU, avec des panneaux installés en jardin botanique et une présence internationale au congrès ATBC 2026.</p>
+      <p class="hero-sub" data-lang="en">Challenge-based learning from botanical gardens to fossil records: students engaging science with society. A CHARM-EU funded project with panels installed in botanical gardens and an international presence at the ATBC 2026 congress.</p>
+      <p class="hero-sub" data-lang="cn">从植物园到化石记录的挑战式学习：学生将科学与社会连接。由CHARM-EU资助，展示板安装于植物园，并在ATBC 2026大会上展示国际影响力。</p>
+
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-label" data-lang="fr" class="visible">Institutions</div>
+          <div class="hero-stat-label" data-lang="en">Institutions</div>
+          <div class="hero-stat-label" data-lang="cn">合作机构</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label" data-lang="fr" class="visible">Étudiants à l'ATBC</div>
+          <div class="hero-stat-label" data-lang="en">Students at ATBC</div>
+          <div class="hero-stat-label" data-lang="cn">ATBC参会学生</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label" data-lang="fr" class="visible">Panneaux conçus</div>
+          <div class="hero-stat-label" data-lang="en">Panels designed</div>
+          <div class="hero-stat-label" data-lang="cn">已设计展示板</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-label" data-lang="fr" class="visible">Langues</div>
+          <div class="hero-stat-label" data-lang="en">Languages</div>
+          <div class="hero-stat-label" data-lang="cn">语言</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGO BAND -->
+<div class="logo-band">
+  <span class="logo-band-label" data-lang="fr" style="display:inline">Financé par</span>
+  <span class="logo-band-label" data-lang="en" style="display:none">Funded by</span>
+  <span class="logo-band-label" data-lang="cn" style="display:none">资助方</span>
+  <div class="logo-items">
+    <a href="https://charm-eu.eu" target="_blank" class="logo-item" title="CHARM-EU">
+      <div class="logo-box"><div class="charm-badge">CHARM-EU<br>Alliance</div></div>
+      <span class="logo-name">charm-eu.eu</span>
+    </a>
+    <div class="logo-divider"></div>
+    <div class="logo-item"><div class="logo-box"><div class="um-badge">UM</div></div><span class="logo-name">Univ. Montpellier</span></div>
+    <div class="logo-item"><div class="logo-box"><div class="tcd-badge">TCD</div></div><span class="logo-name">Trinity Dublin</span></div>
+    <div class="logo-item"><div class="logo-box"><div class="xtbg-badge">XTBG</div></div><span class="logo-name">XTBG · CAS</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ ARTICLE FR -->
+<article data-lang="fr" class="visible">
+
+  <div class="section-eyebrow">Le projet</div>
+  <h2>Un modèle pédagogique <em>transdisciplinaire</em></h2>
+  <p>SEED-ED est une initiative pédagogique fondée sur l'apprentissage par le défi (<em>challenge-based learning</em>), développée dans le cadre de l'alliance universitaire européenne <a href="https://charm-eu.eu" target="_blank" class="inline-link">CHARM-EU</a>. Elle engage les étudiants dans la conception de supports de médiation scientifique à destination du grand public, à partir de collections botaniques vivantes et de collections fossiles.</p>
+  <p>Les étudiants choisissent librement leur angle scientifique : conservation des espèces, écologie urbaine, One Health ou biogéographie, puis produisent des panneaux multilingues installés dans des jardins botaniques et accessibles en ligne via QR code, accompagnés de rapports de recherche déposés sur HAL.</p>
+
+  <div class="obj-grid">
+    <div class="obj-card">
+      <div class="obj-icon">🌱</div>
+      <div class="obj-title">Apprentissage par le défi</div>
+      <div class="obj-text">Les étudiants définissent leurs propres questions de recherche et produisent des résultats concrets, socialement pertinents.</div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">🔬</div>
+      <div class="obj-title">Biodiversité & conservation</div>
+      <div class="obj-text">Transformer les collections scientifiques en outils éducatifs accessibles à tous les publics.</div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">🌍</div>
+      <div class="obj-title">Science ouverte</div>
+      <div class="obj-text">Tous les contenus sont librement accessibles en trois langues via une plateforme numérique dédiée.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ATBC HIGHLIGHT - early in the page -->
+  <div class="section-eyebrow">Impact international</div>
+  <h2>Jusqu'au congrès <em>ATBC 2026</em></h2>
+  <p>Au-delà des jardins botaniques, SEED-ED rayonne à l'échelle internationale. En 2026, le projet a financé la participation de <strong>4 étudiants</strong> au 62e congrès annuel de l'Association for Tropical Biology and Conservation (ATBC), tenu à Xishuangbanna, Chine. Ils y ont présenté leurs travaux devant une audience internationale de biologistes tropicaux.</p>
+
+  <div class="atbc-banner">
+    <div>
+      <div class="atbc-flag">ATBC 2026 · Xishuangbanna, Chine · Workshop</div>
+      <div class="atbc-title">Education and outreach initiatives for tropical biodiversity: a collaborative hands-on session</div>
+      <div class="atbc-desc">Un workshop que j'organise et co-préside avec Ma. Niña Regina Quibod (XTBG), rassemblant des chercheurs de Tanzanie, des Philippines, de France et d'Irlande autour des pratiques de médiation scientifique pour la biodiversité tropicale.</div>
+      <div class="atbc-stats">
+        <div class="atbc-stat">
+          <div class="atbc-stat-num">4</div>
+          <div class="atbc-stat-label">Étudiants financés</div>
+        </div>
+        <div class="atbc-stat">
+          <div class="atbc-stat-num">4</div>
+          <div class="atbc-stat-label">Pays représentés</div>
+        </div>
+        <div class="atbc-stat">
+          <div class="atbc-stat-num">40+</div>
+          <div class="atbc-stat-label">Participants au workshop</div>
+        </div>
+      </div>
+    </div>
+    <div class="atbc-badge">
+      <div class="atbc-badge-logo">🐘🌿</div>
+      <div class="atbc-badge-text"><span class="atbc-badge-year">ATBC 2026</span>Xishuangbanna<br>China</div>
+    </div>
+  </div>
+
+  <p>Le programme comprend des mini-talks de 5 à 10 minutes présentant des initiatives d'outreach de plusieurs pays, suivis d'un atelier interactif de 30 à 40 minutes permettant aux participants de co-développer de nouvelles idées ou d'adapter des initiatives existantes, créant ainsi de nouvelles collaborations institutionnelles et internationales.</p>
+
+  <div class="photo-block full" style="margin:2rem 0">
+    <div class="photo-wrap wide">
+      <img src="Flyer_Education_Session.jpg" alt="ATBC 2026 workshop flyer" style="object-fit:contain;background:#f5e9c8;">
+    </div>
+    <p class="photo-caption">Flyer du workshop ATBC 2026 - Education and outreach initiatives for tropical biodiversity</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Déroulement</div>
+  <h2>De la <em>salle de cours</em> au jardin botanique</h2>
+  <p>Dans l'UE d'Architecture Végétale de la Licence Biologie-Écologie de l'Université de Montpellier, les étudiants de L3 travaillent en groupes sur une espèce présente dans le Jardin des Plantes. Ils formulent une problématique scientifique, conduisent leur analyse, rédigent un contenu accessible en trois langues, et conçoivent un panneau installé à proximité de l'espèce.</p>
+
+  <div class="photo-block right">
+    <div>
+      <p>Les meilleurs travaux sont sélectionnés pour être imprimés et installés physiquement dans le jardin. Les versions numériques sont accessibles via QR code, et les rapports de recherche associés sont déposés sur HAL avec un DOI permanent.</p>
+      <p>Ce dispositif fait du Jardin des Plantes un espace vivant de diffusion scientifique, où chaque visite peut devenir une expérience d'apprentissage, pour les promeneurs comme pour les chercheurs.</p>
+      <p style="margin-top:1.25rem"><a href="../jardin-des-plantes/jardin-des-plantes.html" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;padding:.55rem 1.2rem;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:500" onmouseover="this.style.background='#0e6b6b'" onmouseout="this.style.background='var(--accent)'">🌿 Voir les panneaux installés</a></p>
+    </div>
+    <div>
+      <div class="photo-wrap">
+        <img src="imgs/students_garden.jpg" alt="Étudiants au jardin" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>👩‍🎓</div><div class=\'photo-placeholder-name\'>students_garden.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">Étudiants en travaux pratiques au Jardin des Plantes de Montpellier</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Chronologie</div>
+  <h2>SEED-ED en <em>trois phases</em></h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">2024–25</div>
+      <div class="tl-body">
+        <div class="tl-title">Partie 1 - Collections vivantes (Montpellier) <span class="tl-tag">✓ Complété</span></div>
+        <div class="tl-desc">Conception et installation des premiers panneaux au Jardin des Plantes de Montpellier. Validation du modèle pédagogique challenge-based. Webinar international UM–TCD (juin 2025).</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2025–26</div>
+      <div class="tl-body">
+        <div class="tl-title">Partie 2 - Collections fossiles & ATBC <span class="tl-tag">En cours</span></div>
+        <div class="tl-desc">Extension aux collections fossiles (Montpellier) et aux collections vivantes de Trinity College Dublin. Financement de 4 étudiants pour présenter leurs travaux au congrès ATBC 2026 à Xishuangbanna, Chine.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2026–27</div>
+      <div class="tl-body">
+        <div class="tl-title">Partie 3 - Herbier & déploiement CHARM-EU</div>
+        <div class="tl-desc">Extension vers les collections d'herbiers (Allemagne ?) et consolidation du modèle comme cadre éducatif transférable au sein de l'alliance CHARM-EU.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Webinar banner -->
+  <div class="webinar-banner">
+    <div>
+      <div class="webinar-label">Événement · 5 juin 2026</div>
+      <div class="webinar-title">Webinar - Outreach Initiatives: Promoting Collections and Biodiversity</div>
+      <div class="webinar-date">Vendredi 5 juin 2026 · 14h30 Paris · 13h30 Dublin</div>
+    </div>
+    <a href="https://umontpellier-fr.zoom.us/j/92271185041" target="_blank" class="webinar-link">🎙 Rejoindre le webinar</a>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Partenaires</div>
+  <h2>Une collaboration <em>européenne et internationale</em></h2>
+
+  <div class="partners-grid">
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="um-badge" style="width:28px;height:28px;font-size:.55rem">UM</div><div class="partner-name">Université de Montpellier</div></div>
+      <div class="partner-role">Institution coordinatrice. Jardin des Plantes, Licence Biologie-Écologie, AMaplab.</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="tcd-badge" style="width:28px;height:28px;font-size:.5rem">TCD</div><div class="partner-name">Trinity College Dublin</div></div>
+      <div class="partner-role">Partenaire européen. Collections botaniques et fossiles, coordination Thibault Durieux.</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="xtbg-badge" style="width:28px;height:28px;font-size:.5rem">XTBG</div><div class="partner-name">XTBG · Académie des Sciences de Chine</div></div>
+      <div class="partner-role">Partenaire international. Hôte du congrès ATBC 2026, soutien aux traductions chinoises.</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="charm-badge" style="font-size:.44rem;border-radius:4px;padding:.2rem .4rem">CHARM-EU</div><div class="partner-name">CHARM-EU Alliance</div></div>
+      <div class="partner-role">Financeur principal. Alliance interuniversitaire européenne co-financée par Erasmus+.</div>
+    </div>
+  </div>
+
+</article>
+
+<!-- ============================================================ ARTICLE EN -->
+<article data-lang="en">
+
+  <div class="section-eyebrow">The project</div>
+  <h2>A <em>transdisciplinary</em> pedagogical model</h2>
+  <p>SEED-ED is an educational initiative based on challenge-based learning, developed within the European university alliance <a href="https://charm-eu.eu" target="_blank" class="inline-link">CHARM-EU</a>. It engages students in designing science communication materials for the general public, using both living botanical collections and fossil collections.</p>
+  <p>Students freely choose their scientific angle: species conservation, urban ecology, One Health or biogeography, and produce multilingual panels physically installed in botanical gardens and accessible online via QR code, alongside research reports deposited on HAL.</p>
+
+  <div class="obj-grid">
+    <div class="obj-card">
+      <div class="obj-icon">🌱</div>
+      <div class="obj-title">Challenge-based learning</div>
+      <div class="obj-text">Students define their own research questions and produce concrete, socially relevant outputs.</div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">🔬</div>
+      <div class="obj-title">Biodiversity & conservation</div>
+      <div class="obj-text">Transforming scientific collections into educational and conservation tools accessible to all audiences.</div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">🌍</div>
+      <div class="obj-title">Open science</div>
+      <div class="obj-text">All content is freely accessible in three languages on a dedicated digital platform.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">International impact</div>
+  <h2>All the way to <em>ATBC 2026</em></h2>
+  <p>Beyond botanical gardens, SEED-ED has an international reach. In 2026, the project funded the participation of <strong>4 students</strong> in the 62nd Annual Meeting of the Association for Tropical Biology and Conservation (ATBC), held in Xishuangbanna, China. They presented their work to an international audience of tropical biologists.</p>
+
+  <div class="atbc-banner">
+    <div>
+      <div class="atbc-flag">ATBC 2026 · Xishuangbanna, China · Workshop</div>
+      <div class="atbc-title">Education and outreach initiatives for tropical biodiversity: a collaborative hands-on session</div>
+      <div class="atbc-desc">A workshop I organised and co-chaired with Ma. Niña Regina Quibod (XTBG), bringing together researchers from Tanzania, the Philippines, France and Ireland around science communication practices for tropical biodiversity.</div>
+      <div class="atbc-stats">
+        <div class="atbc-stat">
+          <div class="atbc-stat-num">4</div>
+          <div class="atbc-stat-label">Students funded</div>
+        </div>
+        <div class="atbc-stat">
+          <div class="atbc-stat-num">4</div>
+          <div class="atbc-stat-label">Countries represented</div>
+        </div>
+        <div class="atbc-stat">
+          <div class="atbc-stat-num">40+</div>
+          <div class="atbc-stat-label">Workshop participants</div>
+        </div>
+      </div>
+    </div>
+    <div class="atbc-badge">
+      <div class="atbc-badge-logo">🐘🌿</div>
+      <div class="atbc-badge-text"><span class="atbc-badge-year">ATBC 2026</span>Xishuangbanna<br>China</div>
+    </div>
+  </div>
+
+  <p>The workshop programme included 5-10 minute mini-talks presenting outreach initiatives from multiple countries, followed by a 30-40 minute interactive workshop where participants co-developed new ideas or adapted existing initiatives, fostering new institutional and international collaborations.</p>
+
+  <div class="photo-block full" style="margin:2rem 0">
+    <div class="photo-wrap wide">
+      <img src="Flyer_Education_Session.jpg" alt="ATBC 2026 workshop flyer" style="object-fit:contain;background:#f5e9c8;">
+    </div>
+    <p class="photo-caption">ATBC 2026 workshop flyer - Education and outreach initiatives for tropical biodiversity</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">How it works</div>
+  <h2>From <em>classroom</em> to botanical garden</h2>
+  <p>In the Plant Architecture course of the Biology-Ecology Bachelor's at the University of Montpellier, third-year students work in groups on a species present in the Jardin des Plantes. They formulate a scientific question, conduct their analysis, write accessible content in three languages, and design a panel installed near the species studied.</p>
+
+  <div class="photo-block right">
+    <div>
+      <p>The best projects are selected to be printed and physically installed in the garden. Digital versions are accessible via QR code from the panel, and the associated research reports are deposited on the HAL platform with a permanent DOI.</p>
+      <p>This approach turns the Jardin des Plantes into a living scientific dissemination space, where every visit can become a learning experience, for strollers and researchers alike.</p>
+      <p style="margin-top:1.25rem"><a href="../jardin-des-plantes/jardin-des-plantes.html" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;padding:.55rem 1.2rem;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:500" onmouseover="this.style.background='#0e6b6b'" onmouseout="this.style.background='var(--accent)'">🌿 See installed panels</a></p>
+    </div>
+    <div>
+      <div class="photo-wrap">
+        <img src="imgs/students_garden.jpg" alt="Students in the garden" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><div class=\'photo-placeholder-icon\'>👩‍🎓</div><div class=\'photo-placeholder-name\'>students_garden.jpg</div></div>'">
+      </div>
+      <p class="photo-caption">Students during field work at the Jardin des Plantes de Montpellier</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Timeline</div>
+  <h2>SEED-ED in <em>three phases</em></h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">2024–25</div>
+      <div class="tl-body">
+        <div class="tl-title">Part 1 - Living collections (Montpellier) <span class="tl-tag">✓ Complete</span></div>
+        <div class="tl-desc">Design and installation of the first panels at the Jardin des Plantes de Montpellier. Validation of the challenge-based pedagogical model. International webinar UM–TCD (June 2025).</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2025–26</div>
+      <div class="tl-body">
+        <div class="tl-title">Part 2 - Fossil collections & ATBC <span class="tl-tag">In progress</span></div>
+        <div class="tl-desc">Extension to fossil collections (Montpellier) and living collections at Trinity College Dublin. Funding of 4 students to present their work at the ATBC 2026 congress in Xishuangbanna, China.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2026–27</div>
+      <div class="tl-body">
+        <div class="tl-title">Part 3 - Herbarium & CHARM-EU deployment</div>
+        <div class="tl-desc">Extension to herbarium collections (Germany?) and consolidation of the model as a transferable educational framework within the CHARM-EU alliance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="webinar-banner">
+    <div>
+      <div class="webinar-label">Event · June 5th 2026</div>
+      <div class="webinar-title">Webinar - Outreach Initiatives: Promoting Collections and Biodiversity</div>
+      <div class="webinar-date">Friday, June 5th 2026 · 2:30 PM Paris · 1:30 PM Dublin</div>
+    </div>
+    <a href="https://umontpellier-fr.zoom.us/j/92271185041" target="_blank" class="webinar-link">🎙 Join the webinar</a>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">Partners</div>
+  <h2>A <em>European and international</em> collaboration</h2>
+
+  <div class="partners-grid">
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="um-badge" style="width:28px;height:28px;font-size:.55rem">UM</div><div class="partner-name">University of Montpellier</div></div>
+      <div class="partner-role">Lead institution. Jardin des Plantes, Biology-Ecology Bachelor's, AMaplab.</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="tcd-badge" style="width:28px;height:28px;font-size:.5rem">TCD</div><div class="partner-name">Trinity College Dublin</div></div>
+      <div class="partner-role">European partner. Botanical and fossil collections, coordination by Thibault Durieux.</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="xtbg-badge" style="width:28px;height:28px;font-size:.5rem">XTBG</div><div class="partner-name">XTBG · Chinese Academy of Sciences</div></div>
+      <div class="partner-role">International partner. Host of ATBC 2026 congress, support for Chinese translations.</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-badge-row"><div class="charm-badge" style="font-size:.44rem;border-radius:4px;padding:.2rem .4rem">CHARM-EU</div><div class="partner-name">CHARM-EU Alliance</div></div>
+      <div class="partner-role">Main funder. European inter-university alliance co-funded by Erasmus+.</div>
+    </div>
+  </div>
+
+</article>
+
+<!-- ============================================================ ARTICLE CN -->
+<article data-lang="cn">
+
+  <div class="section-eyebrow">项目介绍</div>
+  <h2>一个<em>跨学科</em>教学模式</h2>
+  <p>SEED-ED是一项基于挑战式学习的教育项目，由欧洲大学联盟<a href="https://charm-eu.eu" target="_blank" class="inline-link">CHARM-EU</a>资助。项目鼓励学生围绕活体植物收藏和化石收藏，设计面向公众的科学传播材料。</p>
+  <p>学生自由选择研究角度：物种保护、城市生态、同一健康或生物地理学，并以三种语言制作多语言展示板，实体安装于植物园，同时通过二维码在线获取，配套研究报告存档于HAL平台。</p>
+
+  <div class="obj-grid">
+    <div class="obj-card"><div class="obj-icon">🌱</div><div class="obj-title">挑战式学习</div><div class="obj-text">学生自主提出研究问题，产出具体且具有社会意义的成果。</div></div>
+    <div class="obj-card"><div class="obj-icon">🔬</div><div class="obj-title">生物多样性与保护</div><div class="obj-text">将科学收藏转化为人人可及的教育和保护工具。</div></div>
+    <div class="obj-card"><div class="obj-icon">🌍</div><div class="obj-title">开放科学</div><div class="obj-text">所有内容以三种语言在专属数字平台上免费提供。</div></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">国际影响</div>
+  <h2>走向<em>ATBC 2026</em>国际舞台</h2>
+  <p>SEED-ED不仅限于植物园，更具有国际影响力。2026年，项目资助<strong>4名学生</strong>参加在中国西双版纳举办的第62届热带生物学与保护协会（ATBC）年会，在国际生物学家面前展示他们的成果。</p>
+
+  <div class="atbc-banner">
+    <div>
+      <div class="atbc-flag">ATBC 2026 · 中国西双版纳 · 工作坊</div>
+      <div class="atbc-title">热带生物多样性的教育与外展活动：协作实践工作坊</div>
+      <div class="atbc-desc">这是一个由我组织并与Ma. Niña Regina Quibod（XTBG）共同主持的工作坊，汇聚来自坦桑尼亚、菲律宾、法国和爱尔兰的研究人员，共同探讨热带生物多样性的科学传播实践。</div>
+      <div class="atbc-stats">
+        <div class="atbc-stat"><div class="atbc-stat-num">4</div><div class="atbc-stat-label">资助学生</div></div>
+        <div class="atbc-stat"><div class="atbc-stat-num">4</div><div class="atbc-stat-label">代表国家</div></div>
+        <div class="atbc-stat"><div class="atbc-stat-num">40+</div><div class="atbc-stat-label">工作坊参与者</div></div>
+      </div>
+    </div>
+    <div class="atbc-badge">
+      <div class="atbc-badge-logo">🐘🌿</div>
+      <div class="atbc-badge-text"><span class="atbc-badge-year">ATBC 2026</span>西双版纳<br>中国</div>
+    </div>
+  </div>
+
+  <div class="photo-block full" style="margin:2rem 0">
+    <div class="photo-wrap wide">
+      <img src="Flyer_Education_Session.jpg" alt="ATBC 2026工作坊宣传单" style="object-fit:contain;background:#f5e9c8;">
+    </div>
+    <p class="photo-caption">ATBC 2026工作坊宣传单 - 热带生物多样性的教育与外展活动</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">项目时间线</div>
+  <h2>SEED-ED <em>三个阶段</em></h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">2024–25</div>
+      <div class="tl-body">
+        <div class="tl-title">第一阶段 - 活体收藏（蒙彼利埃）<span class="tl-tag">✓ 已完成</span></div>
+        <div class="tl-desc">在蒙彼利埃植物园设计并安装首批展示板，验证挑战式教学模式。UM–TCD国际网络研讨会（2025年6月）。</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2025–26</div>
+      <div class="tl-body">
+        <div class="tl-title">第二阶段 - 化石收藏与ATBC<span class="tl-tag">进行中</span></div>
+        <div class="tl-desc">延伸至蒙彼利埃化石收藏和都柏林三一学院活体收藏。资助4名学生参加ATBC 2026大会（西双版纳）。</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2026–27</div>
+      <div class="tl-body">
+        <div class="tl-title">第三阶段 - 腊叶标本馆与CHARM-EU推广</div>
+        <div class="tl-desc">拓展至腊叶标本馆收藏（德国？），整合为可在CHARM-EU联盟内推广的教育框架。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="webinar-banner">
+    <div>
+      <div class="webinar-label">活动 · 2026年6月5日</div>
+      <div class="webinar-title">网络研讨会 - 推广收藏与生物多样性的外展活动</div>
+      <div class="webinar-date">2026年6月5日（周五）· 巴黎时间14:30 · 都柏林时间13:30</div>
+    </div>
+    <a href="https://umontpellier-fr.zoom.us/j/92271185041" target="_blank" class="webinar-link">🎙 加入研讨会</a>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-eyebrow">合作伙伴</div>
+  <h2>欧洲与国际<em>合作</em></h2>
+
+  <div class="partners-grid">
+    <div class="partner-card"><div class="partner-badge-row"><div class="um-badge" style="width:28px;height:28px;font-size:.55rem">UM</div><div class="partner-name">蒙彼利埃大学</div></div><div class="partner-role">牵头机构。植物园、生物生态学学士项目、AMaplab。</div></div>
+    <div class="partner-card"><div class="partner-badge-row"><div class="tcd-badge" style="width:28px;height:28px;font-size:.5rem">TCD</div><div class="partner-name">都柏林三一学院</div></div><div class="partner-role">欧洲合作伙伴。植物和化石收藏，Thibault Durieux负责协调。</div></div>
+    <div class="partner-card"><div class="partner-badge-row"><div class="xtbg-badge" style="width:28px;height:28px;font-size:.5rem">XTBG</div><div class="partner-name">西双版纳热带植物园·中科院</div></div><div class="partner-role">国际合作伙伴。ATBC 2026大会主办方，支持中文翻译。</div></div>
+    <div class="partner-card"><div class="partner-badge-row"><div class="charm-badge" style="font-size:.44rem;border-radius:4px;padding:.2rem .4rem">CHARM-EU</div><div class="partner-name">CHARM-EU联盟</div></div><div class="partner-role">主要资助方。欧洲跨大学联盟，由Erasmus+共同资助。</div></div>
+  </div>
+
+</article>
+
+<!-- SITES SECTION -->
+<div style="max-width:780px;margin:0 auto;padding:0 2rem 5rem">
+  <div style="border-top:1px solid var(--sand);padding-top:3rem">
+    <div class="section-eyebrow">
+      <span data-lang="fr" class="visible">Sites partenaires</span>
+      <span data-lang="en">Partner sites</span>
+      <span data-lang="cn">合作地点</span>
+    </div>
+    <h2 style="margin-bottom:1.5rem">
+      <span data-lang="fr" class="visible">Où trouver nos <em>panneaux</em></span>
+      <span data-lang="en">Where to find our <em>panels</em></span>
+      <span data-lang="cn">在哪里找到我们的<em>展示板</em></span>
+    </h2>
+    <div class="sites-grid">
+      <a href="../jardin-des-plantes/jardin-des-plantes.html" class="site-card">
+        <div class="site-tag">Montpellier · France</div>
+        <div class="site-name">Jardin des Plantes de Montpellier</div>
+        <div class="site-desc">
+          <span data-lang="fr" class="visible">Le plus ancien jardin botanique de France, fondé en 1593. 4 panneaux installés.</span>
+          <span data-lang="en">The oldest botanical garden in France, founded in 1593. 4 panels installed.</span>
+          <span data-lang="cn">法国最古老的植物园，建于1593年。已安装4块展示板。</span>
+        </div>
+        <div style="display:flex;gap:.4rem"><span class="panel-dot">4 panneaux</span></div>
+      </a>
+      <div class="site-card" style="opacity:.6;cursor:default">
+        <div class="site-tag">Dublin · Ireland</div>
+        <div class="site-name">Trinity College Dublin Botanical Garden</div>
+        <div class="site-desc">
+          <span data-lang="fr" class="visible">Collections vivantes - panneaux en cours de développement (2025-26).</span>
+          <span data-lang="en">Living collections - panels currently in development (2025-26).</span>
+          <span data-lang="cn">活体收藏——展示板正在开发中（2025-26）。</span>
+        </div>
+        <div style="display:flex;gap:.4rem"><span class="panel-dot" style="background:var(--sand);color:var(--muted)">
+          <span data-lang="fr" class="visible">À venir</span>
+          <span data-lang="en">Coming soon</span>
+          <span data-lang="cn">即将推出</span>
+        </span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Artemis Anest · Research · Teaching · Outreach &nbsp;·&nbsp;
+  <a href="#">HAL</a> &nbsp;·&nbsp; <a href="#">ORCID</a> &nbsp;·&nbsp;
+  <a href="https://charm-eu.eu" target="_blank">CHARM-EU</a>
+</footer>
+
+<script>
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.langBtn === lang)
+    );
+    document.documentElement.lang = lang === 'cn' ? 'zh' : lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+    document.querySelectorAll('.logo-band-label[data-lang]').forEach(el => {
+      el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
+    });
+  }
+  switchLang('fr');
+</script>
+</body>
+</html>
