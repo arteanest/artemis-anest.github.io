@@ -242,14 +242,20 @@
     });
   }
 
-  function switchTab(tab, event) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-    event.target.closest('.tab-btn').classList.add('active');
+   function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.langBtn === lang)
+    );
+    document.documentElement.lang = lang === 'cn' ? 'zh' : lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+    document.querySelectorAll('.logo-band-label[data-lang]').forEach(el => {
+      el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
+    });
+    localStorage.setItem('lang', lang);  // ← ajouter
   }
-
-  switchLang('fr');
+  switchLang(localStorage.getItem('lang') || 'fr');  // ← remplacer switchLang('fr')
 </script>
 </body>
 </html>
