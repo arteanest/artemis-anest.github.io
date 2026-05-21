@@ -450,7 +450,7 @@
 </footer>
 
 <script>
-  function switchLang(lang) {
+ function switchLang(lang) {
     document.querySelectorAll('.lang-btn').forEach(btn =>
       btn.classList.toggle('active', btn.dataset.langBtn === lang)
     );
@@ -458,8 +458,12 @@
     document.querySelectorAll('[data-lang]').forEach(el => {
       el.classList.toggle('visible', el.dataset.lang === lang);
     });
+    document.querySelectorAll('.logo-band-label[data-lang]').forEach(el => {
+      el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
+    });
+    localStorage.setItem('lang', lang);  // ← ajouter
   }
-  switchLang('fr');
+  switchLang(localStorage.getItem('lang') || 'fr');  // ← remplacer switchLang('fr')
 </script>
 </body>
 </html>
