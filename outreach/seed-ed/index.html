@@ -37,7 +37,7 @@
   .hero::after { content: ''; position: absolute; bottom: -80px; left: 5%; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(46,196,182,.07); }
   .hero-inner { position: relative; max-width: 900px; display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center; }
   .hero-logo { width: 140px; flex-shrink: 0; }
-  .hero-logo img { width: 100%; filter: brightness(0) invert(1); opacity: .92; }
+  .hero-logo img { width: 100%; opacity: .92; }
   .hero-eyebrow { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .6; margin-bottom: .75rem; }
   .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; font-weight: 400; line-height: 1.15; }
   .hero h1 em { font-style: italic; color: var(--light); }
@@ -705,8 +705,9 @@
     document.querySelectorAll('.logo-band-label[data-lang]').forEach(el => {
       el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
     });
+    localStorage.setItem('lang', lang);  // ← ajouter
   }
-  switchLang('fr');
+  switchLang(localStorage.getItem('lang') || 'fr');  // ← remplacer switchLang('fr')
 </script>
 </body>
 </html>
