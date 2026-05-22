@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Artemis Anest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0a2a2e; --mid: #0e6b6b; --light: #2ec4b6; --pale: #d0f5f2;
+    --cream: #f4fafa; --sand: #d6ecea; --text: #0d2626; --muted: #3a7a78; --accent: #0e9e96;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  nav { background: var(--deep); padding: .9rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .nav-name { font-family: 'Playfair Display', serif; color: var(--pale); font-size: 1rem; letter-spacing: .02em; white-space: nowrap; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { color: var(--light); text-decoration: none; font-size: .8rem; font-weight: 300; letter-spacing: .08em; text-transform: uppercase; transition: color .2s; }
+  .nav-links a:hover { color: #fff; }
+  .breadcrumb-bar { background: var(--deep); padding: 0 2rem .9rem; font-size: .72rem; color: var(--light); letter-spacing: .08em; text-transform: uppercase; opacity: .6; }
+
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+  .lang-bar { background: var(--deep); border-top: 1px solid rgba(46,196,182,.15); padding: .75rem 2rem; display: flex; align-items: center; gap: .75rem; }
+  .lang-label { font-size: .7rem; color: rgba(208,245,242,.4); letter-spacing: .1em; text-transform: uppercase; margin-right: .5rem; }
+  .lang-btn { padding: .45rem 1.2rem; border-radius: 20px; border: 1px solid rgba(46,196,182,.3); background: transparent; color: var(--light); font-size: .9rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s; }
+  .lang-btn:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
+  .lang-btn.active { background: var(--light); color: var(--deep); border-color: var(--light); font-weight: 500; }
+
+  .hero { background: var(--deep); padding: 4rem 2rem 3.5rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(46,196,182,.1); }
+  .hero-inner { position: relative; max-width: 760px; }
+  .hero-eyebrow { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .6; margin-bottom: .75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; font-weight: 400; line-height: 1.15; }
+  .hero h1 em { font-style: italic; color: var(--light); }
+  .hero-sub { margin-top: 1rem; font-size: .88rem; font-weight: 300; color: rgba(208,245,242,.6); line-height: 1.7; max-width: 520px; }
+
+  .page-wrap { max-width: 860px; margin: 0 auto; padding: 3.5rem 2rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+  .section-eyebrow { font-size: .68rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--deep); margin-bottom: 1.5rem; padding-bottom: .75rem; border-bottom: 1px solid var(--sand); }
+
+  /* EMAIL CARD */
+  .contact-card { background: #fff; border: 1px solid var(--sand); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.25rem; }
+  .contact-card-label { font-size: .68rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+  .email-obfuscated { font-size: 1rem; font-weight: 400; color: var(--deep); letter-spacing: .02em; margin-bottom: .75rem; }
+  .email-reveal-btn { display: inline-flex; align-items: center; gap: .4rem; padding: .5rem 1.1rem; border-radius: 6px; background: var(--accent); color: #fff; border: none; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 500; cursor: pointer; transition: background .2s; }
+  .email-reveal-btn:hover { background: var(--mid); }
+  .email-revealed { font-size: 1rem; color: var(--accent); font-weight: 400; word-break: break-all; }
+  .email-copy-btn { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .9rem; border-radius: 5px; background: var(--pale); color: var(--mid); border: none; font-family: 'DM Sans', sans-serif; font-size: .75rem; cursor: pointer; margin-left: .5rem; transition: all .2s; }
+  .email-copy-btn:hover { background: var(--light); color: var(--deep); }
+
+  /* ADDRESS */
+  .address-block { font-size: .88rem; font-weight: 300; color: var(--text); line-height: 1.8; }
+  .address-block a { color: var(--accent); text-decoration: none; font-size: .78rem; border-bottom: 1px solid rgba(14,158,150,.3); }
+  .address-block a:hover { border-bottom-color: var(--accent); }
+
+  /* SOCIAL LINKS */
+  .social-list { display: flex; flex-direction: column; gap: .75rem; }
+  .social-item { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1rem 1.25rem; text-decoration: none; color: inherit; transition: all .2s; }
+  .social-item:hover { border-color: var(--light); box-shadow: 0 4px 16px rgba(10,42,46,.06); transform: translateY(-1px); }
+  .social-icon { font-size: 1.3rem; width: 36px; text-align: center; flex-shrink: 0; }
+  .social-name { font-weight: 500; font-size: .88rem; color: var(--deep); }
+  .social-handle { font-size: .75rem; color: var(--muted); font-weight: 300; }
+
+  .divider { border: none; border-top: 1px solid var(--sand); margin: 2rem 0; }
+
+  footer { background: var(--deep); padding: 1.75rem 2rem; text-align: center; color: rgba(208,245,242,.35); font-size: .75rem; font-weight: 300; letter-spacing: .05em; }
+  footer a { color: var(--light); text-decoration: none; opacity: .7; }
+
+  @media(max-width: 680px) { .page-wrap { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-name">Artemis Anest</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="teaching.html">Teaching</a></li>
+    <li><a href="outreach/seed-ed/index.html">Outreach</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="breadcrumb-bar">
+  <span data-lang="fr" class="visible">Contact</span>
+  <span data-lang="en">Contact</span>
+  <span data-lang="cn">联系方式</span>
+</div>
+
+<div class="lang-bar">
+  <span class="lang-label">Lang</span>
+  <button class="lang-btn" data-lang-btn="fr" onclick="switchLang('fr')">Français</button>
+  <button class="lang-btn active" data-lang-btn="en" onclick="switchLang('en')">English</button>
+  <button class="lang-btn" data-lang-btn="cn" onclick="switchLang('cn')">中文</button>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">UMR AMAP · University of Montpellier</div>
+    <h1 data-lang="fr" class="visible">Contact<br><em>& Coordonnées</em></h1>
+    <h1 data-lang="en">Contact<br><em>& Information</em></h1>
+    <h1 data-lang="cn">联系<br><em>方式</em></h1>
+    <p class="hero-sub" data-lang="fr" class="visible">N'hésitez pas à me contacter pour toute question concernant mes recherches, des collaborations potentielles ou des opportunités d'enseignement.</p>
+    <p class="hero-sub" data-lang="en">Feel free to get in touch for any questions about my research, potential collaborations, or teaching opportunities.</p>
+    <p class="hero-sub" data-lang="cn">欢迎就研究问题、潜在合作或教学机会与我联系。</p>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- LEFT COL -->
+  <div>
+    <div class="section-eyebrow">
+      <span data-lang="fr" class="visible">Email</span>
+      <span data-lang="en">Email</span>
+      <span data-lang="cn">电子邮件</span>
+    </div>
+    <h2>
+      <span data-lang="fr" class="visible">Me contacter</span>
+      <span data-lang="en">Get in touch</span>
+      <span data-lang="cn">发送邮件</span>
+    </h2>
+
+    <div class="contact-card">
+      <div class="contact-card-label">
+        <span data-lang="fr" class="visible">Adresse email professionnelle</span>
+        <span data-lang="en">Professional email address</span>
+        <span data-lang="cn">工作邮箱</span>
+      </div>
+      <div id="email-container">
+        <p class="email-obfuscated">artemis.anest [at] umontpellier.fr</p>
+        <button class="email-reveal-btn" onclick="revealEmail()">
+          <span data-lang="fr" class="visible">📧 Afficher l'email</span>
+          <span data-lang="en">📧 Show email</span>
+          <span data-lang="cn">📧 显示邮箱</span>
+        </button>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-eyebrow">
+      <span data-lang="fr" class="visible">Adresse</span>
+      <span data-lang="en">Address</span>
+      <span data-lang="cn">地址</span>
+    </div>
+    <h2>
+      <span data-lang="fr" class="visible">Laboratoire</span>
+      <span data-lang="en">Laboratory</span>
+      <span data-lang="cn">实验室</span>
+    </h2>
+
+    <div class="contact-card">
+      <div class="contact-card-label">UMR AMAP · CIRAD</div>
+      <div class="address-block">
+        Artemis Anest<br>
+        UMR AMAP<br>
+        Parc Scientifique Agropolis<br>
+        2196 Bd de la Lironde<br>
+        34980 Montferrier-sur-Lez<br>
+        France<br><br>
+        <a href="https://www.google.com/maps/place//data=!4m2!3m1!1s0x12b6a92ba71c0e9f:0xb460da8a8790e7e2" target="_blank">📍
+          <span data-lang="fr" class="visible">Voir sur Google Maps</span>
+          <span data-lang="en">View on Google Maps</span>
+          <span data-lang="cn">在Google地图上查看</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COL -->
+  <div>
+    <div class="section-eyebrow">
+      <span data-lang="fr" class="visible">Profils académiques</span>
+      <span data-lang="en">Academic profiles</span>
+      <span data-lang="cn">学术主页</span>
+    </div>
+    <h2>
+      <span data-lang="fr" class="visible">Retrouvez-moi sur</span>
+      <span data-lang="en">Find me on</span>
+      <span data-lang="cn">学术平台</span>
+    </h2>
+
+    <div class="social-list">
+      <a href="https://orcid.org/0000-0002-6661-4406" target="_blank" class="social-item">
+        <div class="social-icon">🔬</div>
+        <div>
+          <div class="social-name">ORCID</div>
+          <div class="social-handle">0000-0002-6661-4406</div>
+        </div>
+      </a>
+      <a href="https://scholar.google.fr/citations?user=GldeFtIAAAAJ&hl=fr" target="_blank" class="social-item">
+        <div class="social-icon">🎓</div>
+        <div>
+          <div class="social-name">Google Scholar</div>
+          <div class="social-handle">Artemis Anest</div>
+        </div>
+      </a>
+      <a href="https://www.researchgate.net/profile/Artemis-Anest" target="_blank" class="social-item">
+        <div class="social-icon">📄</div>
+        <div>
+          <div class="social-name">ResearchGate</div>
+          <div class="social-handle">Artemis-Anest</div>
+        </div>
+      </a>
+      <a href="https://bsky.app/profile/arteanest.bsky.social" target="_blank" class="social-item">
+        <div class="social-icon">🦋</div>
+        <div>
+          <div class="social-name">Bluesky</div>
+          <div class="social-handle">@arteanest.bsky.social</div>
+        </div>
+      </a>
+      <a href="https://hal.science/search/index/?q=anest+artemis&rows=30" target="_blank" class="social-item">
+        <div class="social-icon">📚</div>
+        <div>
+          <div class="social-name">HAL</div>
+          <div class="social-handle">
+            <span data-lang="fr" class="visible">Publications en accès ouvert</span>
+            <span data-lang="en">Open access publications</span>
+            <span data-lang="cn">开放获取论文</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Artemis Anest · Research · Teaching · Outreach &nbsp;·&nbsp;
+  <a href="https://orcid.org/0000-0002-6661-4406" target="_blank">ORCID</a> &nbsp;·&nbsp;
+  <a href="outreach/seed-ed/index.html">SEED-ED</a>
+</footer>
+
+<script>
+  function revealEmail() {
+    const container = document.getElementById('email-container');
+    const lang = document.documentElement.lang || 'en';
+    const copyLabel = lang === 'fr' ? 'Copier' : lang === 'zh' ? '复制' : 'Copy';
+    const copiedLabel = lang === 'fr' ? 'Copié !' : lang === 'zh' ? '已复制！' : 'Copied!';
+    container.innerHTML = `
+      <p class="email-revealed">artemis.anest@umontpellier.fr
+        <button class="email-copy-btn" onclick="copyEmail(this, '${copiedLabel}')">${copyLabel}</button>
+      </p>
+    `;
+  }
+
+  function copyEmail(btn, copiedLabel) {
+    navigator.clipboard.writeText('artemis.anest@umontpellier.fr');
+    btn.textContent = copiedLabel;
+    setTimeout(() => btn.textContent = btn.textContent.includes('opied') ? (document.documentElement.lang === 'zh' ? '复制' : document.documentElement.lang === 'fr' ? 'Copier' : 'Copy') : btn.textContent, 2000);
+  }
+
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.langBtn === lang)
+    );
+    document.documentElement.lang = lang === 'cn' ? 'zh' : lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+    localStorage.setItem('lang', lang);
+  }
+  switchLang(localStorage.getItem('lang') || 'en');
+</script>
+</body>
+</html>

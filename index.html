@@ -3,416 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jardin des Plantes de Montpellier | Artemis Anest</title>
+<title>Artemis Anest — Plant Architecture & Evolution</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green-deep: #0a2a2e;
-    --green-mid: #0e6b6b;
-    --green-light: #2ec4b6;
-    --green-pale: #d0f5f2;
-    --cream: #f4fafa;
-    --sand: #d6ecea;
-    --text: #0d2626;
-    --text-muted: #3a7a78;
-    --accent: #0e9e96;
+    --deep: #0a2a2e; --mid: #0e6b6b; --light: #2ec4b6; --pale: #d0f5f2;
+    --cream: #f4fafa; --sand: #d6ecea; --text: #0d2626; --muted: #3a7a78; --accent: #0e9e96;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    min-height: 100vh;
-  }
+  nav { background: var(--deep); padding: .9rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .nav-name { font-family: 'Playfair Display', serif; color: var(--pale); font-size: 1rem; letter-spacing: .02em; white-space: nowrap; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { color: var(--light); text-decoration: none; font-size: .8rem; font-weight: 300; letter-spacing: .08em; text-transform: uppercase; transition: color .2s; }
+  .nav-links a:hover { color: #fff; }
 
-  /* NAV */
-  nav {
-    background: var(--green-deep);
-    padding: 1rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-name {
-    font-family: 'Playfair Display', serif;
-    color: var(--green-pale);
-    font-size: 1.1rem;
-    letter-spacing: 0.02em;
-  }
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--green-light);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 300;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover, .nav-links a.active { color: #fff; }
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+  .lang-bar { background: var(--deep); border-top: 1px solid rgba(46,196,182,.15); padding: .75rem 2rem; display: flex; align-items: center; gap: .75rem; }
+  .lang-label { font-size: .7rem; color: rgba(208,245,242,.4); letter-spacing: .1em; text-transform: uppercase; margin-right: .5rem; }
+  .lang-btn { padding: .45rem 1.2rem; border-radius: 20px; border: 1px solid rgba(46,196,182,.3); background: transparent; color: var(--light); font-size: .9rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s; }
+  .lang-btn:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
+  .lang-btn.active { background: var(--light); color: var(--deep); border-color: var(--light); font-weight: 500; }
 
   /* HERO */
-  .hero {
-    background: var(--green-deep);
-    padding: 4rem 3rem 3rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    border: 1px solid rgba(46,196,182,0.18);
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -80px; left: 10%;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    border: 1px solid rgba(46,196,182,0.12);
-  }
-  .breadcrumb {
-    font-size: 0.75rem;
-    color: var(--green-light);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    opacity: 0.7;
-  }
-  .breadcrumb span { opacity: 0.5; margin: 0 0.5rem; }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
-    color: #fff;
-    font-weight: 400;
-    line-height: 1.15;
-    max-width: 600px;
-  }
-  .hero h1 em {
-    color: var(--green-light);
-    font-style: italic;
-  }
-  .hero-desc {
-    margin-top: 1.25rem;
-    color: rgba(208,245,242,0.7);
-    font-size: 0.95rem;
-    font-weight: 300;
-    max-width: 520px;
-    line-height: 1.7;
-  }
-  .hero-meta {
-    margin-top: 2rem;
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  .hero-tag {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--green-light);
-    font-weight: 300;
-  }
-  .hero-tag::before {
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green-light);
-  }
+  .hero { background: var(--deep); padding: 5rem 2rem 4.5rem; position: relative; overflow: hidden; min-height: 70vh; display: flex; align-items: center; }
+  .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 400px; height: 400px; border-radius: 50%; border: 1px solid rgba(46,196,182,.08); }
+  .hero::after { content: ''; position: absolute; bottom: -100px; left: 3%; width: 280px; height: 280px; border-radius: 50%; border: 1px solid rgba(46,196,182,.06); }
+  .hero-inner { position: relative; max-width: 900px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 4rem; align-items: center; }
+  .hero-text { }
+  .hero-eyebrow { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--light); opacity: .6; margin-bottom: 1rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4rem); color: #fff; font-weight: 400; line-height: 1.1; margin-bottom: 1rem; }
+  .hero h1 em { font-style: italic; color: var(--light); display: block; }
+  .hero-position { font-size: .88rem; font-weight: 300; color: rgba(208,245,242,.55); margin-bottom: 1.5rem; line-height: 1.6; }
+  .hero-bio { font-size: .9rem; font-weight: 300; color: rgba(208,245,242,.7); line-height: 1.8; max-width: 540px; border-left: 2px solid rgba(46,196,182,.3); padding-left: 1.25rem; margin-bottom: 2rem; }
+  .hero-nav { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .hero-nav-link { display: inline-flex; align-items: center; gap: .4rem; padding: .6rem 1.3rem; border-radius: 6px; text-decoration: none; font-size: .83rem; font-weight: 400; transition: all .2s; }
+  .hero-nav-link.primary { background: var(--light); color: var(--deep); font-weight: 500; }
+  .hero-nav-link.primary:hover { background: #fff; }
+  .hero-nav-link.secondary { border: 1px solid rgba(46,196,182,.35); color: var(--light); }
+  .hero-nav-link.secondary:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
 
-  /* MAIN */
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 4rem 3rem;
-  }
+  /* PHOTO */
+  .hero-photo { width: 220px; flex-shrink: 0; }
+  .hero-photo img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 12px; border: 2px solid rgba(46,196,182,.2); display: block; }
+  .hero-photo-placeholder { width: 100%; aspect-ratio: 3/4; border-radius: 12px; border: 2px dashed rgba(46,196,182,.2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; color: rgba(208,245,242,.3); font-size: .75rem; text-align: center; padding: 1rem; }
+  .hero-photo-placeholder-icon { font-size: 2.5rem; opacity: .3; }
 
-  /* SECTION HEADER */
-  .section-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 2.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--sand);
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--green-deep);
-  }
-  .section-title span {
-    display: block;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.3rem;
-  }
-  .panel-count {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
+  /* SECTIONS GRID */
+  .sections-wrap { max-width: 900px; margin: 0 auto; padding: 4rem 2rem 5rem; }
+  .sections-eyebrow { font-size: .68rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
+  .sections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.1rem; }
+  .section-card { background: #fff; border: 1px solid var(--sand); border-radius: 12px; padding: 1.75rem; text-decoration: none; color: inherit; display: block; transition: all .2s; }
+  .section-card:hover { box-shadow: 0 6px 24px rgba(10,42,46,.08); transform: translateY(-3px); border-color: var(--light); }
+  .section-card-icon { font-size: 1.8rem; margin-bottom: .75rem; }
+  .section-card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--deep); margin-bottom: .4rem; }
+  .section-card-desc { font-size: .8rem; color: var(--muted); font-weight: 300; line-height: 1.6; }
 
-  /* PANEL CARDS */
-  .panels-grid {
-    display: grid;
-    gap: 1.5rem;
-  }
+  /* RECENT PUB */
+  .recent-wrap { max-width: 900px; margin: 0 auto; padding: 0 2rem 5rem; }
+  .recent-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: .75rem; border-bottom: 1px solid var(--sand); }
+  .recent-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--deep); }
+  .recent-link { font-size: .78rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(14,158,150,.3); }
+  .recent-link:hover { border-bottom-color: var(--accent); }
+  .pub-item { background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; transition: all .2s; }
+  .pub-item:hover { border-color: var(--light); }
+  .pub-authors { font-size: .8rem; color: var(--muted); font-weight: 300; margin-bottom: .3rem; }
+  .pub-authors strong { color: var(--text); font-weight: 500; }
+  .pub-title { font-size: .92rem; font-style: italic; color: var(--deep); margin-bottom: .3rem; line-height: 1.4; }
+  .pub-journal { font-size: .8rem; color: var(--muted); font-weight: 300; margin-bottom: .5rem; }
+  .pub-link { font-size: .72rem; font-weight: 500; padding: 2px 9px; border-radius: 4px; background: var(--pale); color: var(--mid); text-decoration: none; }
+  .pub-link:hover { background: var(--light); color: var(--deep); }
 
-  .panel-card {
-    background: #fff;
-    border: 1px solid var(--sand);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: box-shadow 0.25s, transform 0.25s;
-  }
-  .panel-card:hover {
-    box-shadow: 0 8px 32px rgba(10,42,46,0.08);
-    transform: translateY(-2px);
-  }
+  footer { background: var(--deep); padding: 1.75rem 2rem; text-align: center; color: rgba(208,245,242,.35); font-size: .75rem; font-weight: 300; letter-spacing: .05em; }
+  footer a { color: var(--light); text-decoration: none; opacity: .7; }
 
-  .panel-header {
-    padding: 1.5rem 2rem;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    cursor: pointer;
+  @media(max-width: 680px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-photo { width: 140px; margin: 0 auto; }
   }
-
-  .panel-number {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.4rem;
-  }
-
-  .panel-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--green-deep);
-    line-height: 1.3;
-  }
-
-  .panel-common {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    margin-top: 0.3rem;
-    font-weight: 300;
-  }
-
-  .panel-location {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 0.6rem;
-    font-weight: 300;
-  }
-  .panel-location::before {
-    content: '📍';
-    font-size: 0.7rem;
-  }
-
-  .panel-toggle {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    border: 1px solid var(--sand);
-    background: var(--cream);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-  .panel-card.open .panel-toggle {
-    background: var(--green-deep);
-    color: #fff;
-    border-color: var(--green-deep);
-    transform: rotate(45deg);
-  }
-
-  /* PANEL BODY */
-  .panel-body {
-    display: none;
-    padding: 0 2rem 1.75rem;
-    border-top: 1px solid var(--sand);
-  }
-  .panel-card.open .panel-body { display: block; }
-
-  .versions-title {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 1.25rem 0 1rem;
-  }
-
-  .versions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-  }
-
-  .version-card {
-    background: var(--cream);
-    border: 1px solid var(--sand);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-  }
-
-  .version-lang {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-  .lang-badge {
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 4px;
-    background: var(--green-pale);
-    color: var(--green-mid);
-  }
-  .lang-badge.fr { background: #e8f0fe; color: #1a47a3; }
-  .lang-badge.en { background: #fff3e0; color: #b85c00; }
-  .lang-badge.cn { background: #f3e8ff; color: #6b21a8; }
-
-  .version-label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
-
-  .version-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .version-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.82rem;
-    color: var(--green-mid);
-    text-decoration: none;
-    padding: 0.4rem 0.6rem;
-    border-radius: 6px;
-    background: #fff;
-    border: 1px solid var(--sand);
-    transition: all 0.15s;
-    font-weight: 400;
-  }
-  .version-link:hover {
-    background: var(--green-pale);
-    border-color: var(--green-light);
-    color: var(--green-deep);
-  }
-  .version-link.placeholder {
-    color: var(--text-muted);
-    font-style: italic;
-    font-weight: 300;
-    cursor: default;
-    opacity: 0.6;
-  }
-  .version-link.placeholder:hover {
-    background: #fff;
-    border-color: var(--sand);
-  }
-
-  .link-icon { font-size: 0.75rem; opacity: 0.7; }
-
-  .physical-note {
-    margin-top: 1.25rem;
-    padding: 0.85rem 1.1rem;
-    background: var(--green-pale);
-    border-radius: 8px;
-    font-size: 0.8rem;
-    color: var(--green-mid);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    font-weight: 300;
-    line-height: 1.6;
-  }
-  .physical-note::before { content: '🌿'; flex-shrink: 0; }
-
-  /* COMING SOON */
-  .coming-soon-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 3rem;
-  }
-  .coming-soon-title {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--sand);
-  }
-  .coming-card {
-    border: 1px dashed var(--sand);
-    border-radius: 12px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .coming-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--sand);
-    flex-shrink: 0;
-  }
-  .coming-text {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    font-weight: 300;
-    font-style: italic;
-  }
-
-  /* FOOTER */
-  footer {
-    background: var(--green-deep);
-    padding: 2rem 3rem;
-    text-align: center;
-    color: rgba(208,245,242,0.4);
-    font-size: 0.78rem;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-  }
-  footer a { color: var(--green-light); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -420,192 +90,178 @@
 <nav>
   <div class="nav-name">Artemis Anest</div>
   <ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="research.html">Research</a></li>
-<li><a href="teaching.html">Teaching</a></li>
-<li><a href="outreach/seed-ed/index.html">Outreach</a></li>
-<li><a href="contact.html">Contact</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="teaching.html">Teaching</a></li>
+    <li><a href="outreach/seed-ed/index.html">Outreach</a></li>
+    <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
 
+<div class="lang-bar">
+  <span class="lang-label">Lang</span>
+  <button class="lang-btn" data-lang-btn="fr" onclick="switchLang('fr')">Français</button>
+  <button class="lang-btn active" data-lang-btn="en" onclick="switchLang('en')">English</button>
+  <button class="lang-btn" data-lang-btn="cn" onclick="switchLang('cn')">中文</button>
+</div>
+
+<!-- HERO -->
 <div class="hero">
-  <div class="breadcrumb">Outreach <span>›</span> SEED-ED <span>›</span> Jardin des Plantes de Montpellier</div>
-  <h1><em>Jardin des Plantes</em><br>de Montpellier</h1>
-  <p class="hero-desc">Interpretation panels installed on-site at the oldest botanical garden in France. Each panel is available physically in French, and digitally in English and Chinese, with an associated report deposited on HAL.</p>
-  <div class="hero-meta">
-    <div class="hero-tag">Founded 1593</div>
-    <div class="hero-tag">French · English · Chinese</div>
-    <div class="hero-tag">Physical & digital formats</div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Associate Professor · UMR AMAP · University of Montpellier</div>
+      <h1>Artemis Anest<br><em>Plant Architecture<br>& Evolution</em></h1>
+
+      <p class="hero-bio" data-lang="fr" class="visible">
+        Mes recherches portent sur les mécanismes écologiques et évolutifs de la diversité architecturale des plantes, en intégrant botanique, écologie fonctionnelle et macroévolution. Je cherche à comprendre comment la forme végétale évolue, des espèces individuelles aux patrons globaux de diversification.
+      </p>
+      <p class="hero-bio" data-lang="en" style="display:block">
+        My research investigates the ecological and evolutionary mechanisms underlying plant architectural diversity across angiosperms. By integrating botany, functional ecology, and macroevolution, I seek to understand how plant form evolves — from individual species to global patterns of diversification.
+      </p>
+      <p class="hero-bio" data-lang="cn">
+        我的研究聚焦于被子植物建筑多样性的生态与进化机制，整合植物学、功能生态学与宏观进化，探索植物形态如何从个别物种到全球多样化格局地演化。
+      </p>
+
+      <div class="hero-nav">
+        <a href="research.html" class="hero-nav-link primary">
+          <span data-lang="fr" class="visible">📚 Recherche & Publications</span>
+          <span data-lang="en" style="display:inline">📚 Research & Publications</span>
+          <span data-lang="cn">📚 研究与论文</span>
+        </a>
+        <a href="outreach/seed-ed/index.html" class="hero-nav-link secondary">
+          <span data-lang="fr" class="visible">🌿 Projet SEED-ED</span>
+          <span data-lang="en" style="display:inline">🌿 SEED-ED Project</span>
+          <span data-lang="cn">🌿 SEED-ED项目</span>
+        </a>
+        <a href="contact.html" class="hero-nav-link secondary">
+          <span data-lang="fr" class="visible">✉ Contact</span>
+          <span data-lang="en" style="display:inline">✉ Contact</span>
+          <span data-lang="cn">✉ 联系</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-photo">
+      <img src="photo.jpg" alt="Artemis Anest"
+        onerror="this.parentElement.innerHTML='<div class=\'hero-photo-placeholder\'><div class=\'hero-photo-placeholder-icon\'>👩‍🔬</div><span>photo.jpg</span></div>'">
+    </div>
   </div>
 </div>
 
-<main>
+<!-- SECTIONS -->
+<div class="sections-wrap">
+  <div class="sections-eyebrow">
+    <span data-lang="fr" class="visible">Explorer le site</span>
+    <span data-lang="en">Explore</span>
+    <span data-lang="cn">探索网站</span>
+  </div>
+  <div class="sections-grid">
+    <a href="research.html" class="section-card">
+      <div class="section-card-icon">📚</div>
+      <div class="section-card-title">
+        <span data-lang="fr" class="visible">Recherche</span>
+        <span data-lang="en">Research</span>
+        <span data-lang="cn">研究</span>
+      </div>
+      <div class="section-card-desc">
+        <span data-lang="fr" class="visible">Publications, conférences, distinctions, financement.</span>
+        <span data-lang="en">Publications, talks, awards, grants.</span>
+        <span data-lang="cn">论文、报告、荣誉与经费。</span>
+      </div>
+    </a>
+    <a href="teaching.html" class="section-card">
+      <div class="section-card-icon">🎓</div>
+      <div class="section-card-title">
+        <span data-lang="fr" class="visible">Enseignement</span>
+        <span data-lang="en">Teaching</span>
+        <span data-lang="cn">教学</span>
+      </div>
+      <div class="section-card-desc">
+        <span data-lang="fr" class="visible">Cours de Licence et Master, 392h, Montpellier.</span>
+        <span data-lang="en">Undergraduate & Master's courses, 392h, Montpellier.</span>
+        <span data-lang="cn">本科与硕士课程，392课时，蒙彼利埃。</span>
+      </div>
+    </a>
+    <a href="outreach/seed-ed/index.html" class="section-card">
+      <div class="section-card-icon">🌿</div>
+      <div class="section-card-title">Outreach · SEED-ED</div>
+      <div class="section-card-desc">
+        <span data-lang="fr" class="visible">Médiation scientifique, jardins botaniques, projet CHARM-EU.</span>
+        <span data-lang="en">Science outreach, botanical gardens, CHARM-EU project.</span>
+        <span data-lang="cn">科学传播、植物园、CHARM-EU项目。</span>
+      </div>
+    </a>
+    <a href="contact.html" class="section-card">
+      <div class="section-card-icon">✉</div>
+      <div class="section-card-title">
+        <span data-lang="fr" class="visible">Contact</span>
+        <span data-lang="en">Contact</span>
+        <span data-lang="cn">联系</span>
+      </div>
+      <div class="section-card-desc">
+        <span data-lang="fr" class="visible">Email, adresse du labo, profils académiques.</span>
+        <span data-lang="en">Email, lab address, academic profiles.</span>
+        <span data-lang="cn">邮箱、实验室地址、学术主页。</span>
+      </div>
+    </a>
+  </div>
+</div>
 
-  <div class="section-header">
-    <div class="section-title">
-      <span>Botanical panels</span>
-      Plant collection
+<!-- RECENT PUBLICATIONS -->
+<div class="recent-wrap">
+  <div class="recent-header">
+    <div class="recent-title">
+      <span data-lang="fr" class="visible">Publications récentes</span>
+      <span data-lang="en">Recent publications</span>
+      <span data-lang="cn">近期论文</span>
     </div>
-    <div class="panel-count">2 panels available · 2 coming soon</div>
+    <a href="research.html" class="recent-link">
+      <span data-lang="fr" class="visible">Voir toutes →</span>
+      <span data-lang="en">View all →</span>
+      <span data-lang="cn">查看全部 →</span>
+    </a>
   </div>
 
-  <div class="panels-grid">
-
-    <!-- PANEL 1 -->
-    <div class="panel-card" id="card-1">
-      <div class="panel-header" onclick="toggleCard('card-1')">
-        <div>
-          <div class="panel-number">Panel 01</div>
-          <div class="panel-name">Parrotia persica</div>
-          <div class="panel-common">Persian Ironwood</div>
-          <div class="panel-location">Jardin des Plantes de Montpellier</div>
-        </div>
-        <div class="panel-toggle">+</div>
-      </div>
-      <div class="panel-body">
-        <div class="physical-note">
-          The physical panel is installed on-site at the Jardin des Plantes de Montpellier. The French version is available in situ. Digital versions in English and Chinese are available below, along with their associated reports deposited on HAL.
-        </div>
-        <div class="versions-title">Available versions</div>
-        <div class="versions-grid">
-          <div class="version-card">
-            <div class="version-lang">
-              <span class="lang-badge fr">FR</span>
-              <span class="version-label">Français — physical panel</span>
-            </div>
-            <div class="version-links">
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">📄</span> PDF — à venir
-              </a>
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">🔗</span> HAL — à déposer
-              </a>
-            </div>
-          </div>
-          <div class="version-card">
-            <div class="version-lang">
-              <span class="lang-badge en">EN</span>
-              <span class="version-label">English — digital</span>
-            </div>
-            <div class="version-links">
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">📄</span> PDF — to add
-              </a>
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">🔗</span> HAL DOI — to add
-              </a>
-            </div>
-          </div>
-          <div class="version-card">
-            <div class="version-lang">
-              <span class="lang-badge cn">中文</span>
-              <span class="version-label">Chinese — digital</span>
-            </div>
-            <div class="version-links">
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">📄</span> PDF — to add
-              </a>
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">🔗</span> HAL DOI — to add
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PANEL 2 -->
-    <div class="panel-card" id="card-2">
-      <div class="panel-header" onclick="toggleCard('card-2')">
-        <div>
-          <div class="panel-number">Panel 02</div>
-          <div class="panel-name">Citrus trifoliata</div>
-          <div class="panel-common">Hardy Orange / Trifoliate Orange</div>
-          <div class="panel-location">Jardin des Plantes de Montpellier</div>
-        </div>
-        <div class="panel-toggle">+</div>
-      </div>
-      <div class="panel-body">
-        <div class="physical-note">
-          The physical panel is installed on-site at the Jardin des Plantes de Montpellier. The French version is available in situ. Digital versions in English and Chinese are available below, along with their associated reports deposited on HAL.
-        </div>
-        <div class="versions-title">Available versions</div>
-        <div class="versions-grid">
-          <div class="version-card">
-            <div class="version-lang">
-              <span class="lang-badge fr">FR</span>
-              <span class="version-label">Français — physical panel</span>
-            </div>
-            <div class="version-links">
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">📄</span> PDF — à venir
-              </a>
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">🔗</span> HAL — à déposer
-              </a>
-            </div>
-          </div>
-          <div class="version-card">
-            <div class="version-lang">
-              <span class="lang-badge en">EN</span>
-              <span class="version-label">English — digital</span>
-            </div>
-            <div class="version-links">
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">📄</span> PDF — to add
-              </a>
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">🔗</span> HAL DOI — to add
-              </a>
-            </div>
-          </div>
-          <div class="version-card">
-            <div class="version-lang">
-              <span class="lang-badge cn">中文</span>
-              <span class="version-label">Chinese — digital</span>
-            </div>
-            <div class="version-links">
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">📄</span> PDF — to add
-              </a>
-              <a href="#" class="version-link placeholder">
-                <span class="link-icon">🔗</span> HAL DOI — to add
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  <div class="pub-item">
+    <div class="pub-authors">Bezandry, R., Guyot, R., Ranarijaona, H. L. T., Sabatier, S., Vavitsara, M. E., & <strong>Anest, A.*</strong> 2026.</div>
+    <div class="pub-title">Architectural singularities in wild Coffea (Baracoffea) species: integrated morphological perspectives for climate-resilient coffee cultivation.</div>
+    <div class="pub-journal">Plant Ecology & Diversity, 1-13.</div>
+    <a href="https://doi.org/10.1080/17550874.2026.2637118" target="_blank" class="pub-link">DOI</a>
   </div>
 
-  <!-- COMING SOON -->
-  <div class="coming-soon-title">Coming soon</div>
-  <div class="coming-soon-grid">
-    <div class="coming-card">
-      <div class="coming-dot"></div>
-      <div class="coming-text">Panel 03 — title to be confirmed</div>
-    </div>
-    <div class="coming-card">
-      <div class="coming-dot"></div>
-      <div class="coming-text">Panel 04 — title to be confirmed</div>
-    </div>
+  <div class="pub-item">
+    <div class="pub-authors">Tomlinson, K. W., Yu, F., Wang, X., [...] <strong>Anest, A.</strong> et al. 2025.</div>
+    <div class="pub-title">The macroecology of spines on woody plants.</div>
+    <div class="pub-journal">Biological Reviews.</div>
+    <a href="https://doi.org/10.1111/brv.70051" target="_blank" class="pub-link">DOI</a>
   </div>
 
-</main>
+  <div class="pub-item">
+    <div class="pub-authors"><strong>Anest A.*</strong>, Bouchenak-Khelladi Y., Charles-Dominique T., Forest F. et al. 2024.</div>
+    <div class="pub-title">Block then sting: the two-step evolution of defensive architecture in herbivore-driven ecosystems.</div>
+    <div class="pub-journal">Nature Plants, 1-11.</div>
+    <a href="https://dx.doi.org/10.1038/s41477-024-01649-4" target="_blank" class="pub-link">DOI</a>
+  </div>
+</div>
 
 <footer>
-  Artemis Anest — Research · Teaching · Outreach &nbsp;·&nbsp;
-  <a href="#">HAL profile</a> &nbsp;·&nbsp;
-  <a href="#">ORCID</a>
+  Artemis Anest · Research · Teaching · Outreach &nbsp;·&nbsp;
+  <a href="https://orcid.org/0000-0002-6661-4406" target="_blank">ORCID</a> &nbsp;·&nbsp;
+  <a href="outreach/seed-ed/index.html">SEED-ED</a>
 </footer>
 
 <script>
-  function toggleCard(id) {
-    const card = document.getElementById(id);
-    card.classList.toggle('open');
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.langBtn === lang)
+    );
+    document.documentElement.lang = lang === 'cn' ? 'zh' : lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+    localStorage.setItem('lang', lang);
   }
+  switchLang(localStorage.getItem('lang') || 'en');
 </script>
-
 </body>
 </html>
