@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research — Artemis Anest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0a2a2e; --mid: #0e6b6b; --light: #2ec4b6; --pale: #d0f5f2;
+    --cream: #f4fafa; --sand: #d6ecea; --text: #0d2626; --muted: #3a7a78; --accent: #0e9e96;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  /* NAV */
+  nav { background: var(--deep); padding: .9rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .nav-name { font-family: 'Playfair Display', serif; color: var(--pale); font-size: 1rem; letter-spacing: .02em; white-space: nowrap; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { color: var(--light); text-decoration: none; font-size: .8rem; font-weight: 300; letter-spacing: .08em; text-transform: uppercase; transition: color .2s; }
+  .nav-links a:hover { color: #fff; }
+  .breadcrumb-bar { background: var(--deep); padding: 0 2rem .9rem; font-size: .72rem; color: var(--light); letter-spacing: .08em; text-transform: uppercase; opacity: .6; }
+  .breadcrumb-bar a { color: inherit; text-decoration: none; }
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+  .lang-bar { background: var(--deep); border-top: 1px solid rgba(46,196,182,.15); padding: .75rem 2rem; display: flex; align-items: center; gap: .75rem; }
+  .lang-label { font-size: .7rem; color: rgba(208,245,242,.4); letter-spacing: .1em; text-transform: uppercase; margin-right: .5rem; }
+  .lang-btn { padding: .45rem 1.2rem; border-radius: 20px; border: 1px solid rgba(46,196,182,.3); background: transparent; color: var(--light); font-size: .9rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s; }
+  .lang-btn:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
+  .lang-btn.active { background: var(--light); color: var(--deep); border-color: var(--light); font-weight: 500; }
+
+  /* HERO */
+  .hero { background: var(--deep); padding: 4rem 2rem 3.5rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(46,196,182,.1); }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: 5%; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(46,196,182,.07); }
+  .hero-inner { position: relative; max-width: 860px; }
+  .hero-eyebrow { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--light); opacity: .6; margin-bottom: .75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: #fff; font-weight: 400; line-height: 1.15; }
+  .hero h1 em { font-style: italic; color: var(--light); }
+  .hero-bio { margin-top: 1.5rem; font-size: .9rem; font-weight: 300; color: rgba(208,245,242,.7); line-height: 1.8; max-width: 680px; border-left: 2px solid rgba(46,196,182,.35); padding-left: 1.5rem; }
+  .hero-meta { margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--light); font-weight: 400; line-height: 1; }
+  .hero-stat-label { font-size: .72rem; color: rgba(208,245,242,.45); letter-spacing: .08em; text-transform: uppercase; margin-top: .3rem; }
+  .hero-links { margin-top: 1.75rem; display: flex; gap: .75rem; flex-wrap: wrap; }
+  .hero-link { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem 1rem; border-radius: 20px; border: 1px solid rgba(46,196,182,.3); color: var(--light); text-decoration: none; font-size: .78rem; font-weight: 300; transition: all .2s; }
+  .hero-link:hover { background: rgba(46,196,182,.1); border-color: var(--light); }
+
+  /* LAYOUT */
+  .page-wrap { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  .section-eyebrow { font-size: .68rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 400; color: var(--deep); margin-bottom: 1.5rem; line-height: 1.3; padding-bottom: .75rem; border-bottom: 1px solid var(--sand); }
+  h2 em { font-style: italic; }
+  .section { margin-bottom: 3.5rem; }
+  .divider { border: none; border-top: 1px solid var(--sand); margin: 3rem 0; }
+
+  /* POSITIONS */
+  .position-list { display: flex; flex-direction: column; gap: 1rem; }
+  .position-item { display: grid; grid-template-columns: 100px 1fr; gap: 1rem; align-items: start; }
+  .position-year { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--accent); font-weight: 400; padding-top: .1rem; }
+  .position-body { }
+  .position-title { font-weight: 500; font-size: .92rem; color: var(--deep); margin-bottom: .2rem; }
+  .position-inst { font-size: .82rem; color: var(--muted); font-weight: 300; }
+
+  /* PUBLICATIONS */
+  .pub-list { display: flex; flex-direction: column; gap: 1.25rem; }
+  .pub-item { background: #fff; border: 1px solid var(--sand); border-radius: 10px; padding: 1.25rem 1.5rem; transition: all .2s; }
+  .pub-item:hover { border-color: var(--light); box-shadow: 0 4px 16px rgba(10,42,46,.06); }
+  .pub-num { font-size: .65rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+  .pub-authors { font-size: .8rem; color: var(--muted); font-weight: 300; margin-bottom: .3rem; line-height: 1.5; }
+  .pub-authors strong { color: var(--text); font-weight: 500; }
+  .pub-title { font-size: .92rem; font-weight: 400; color: var(--deep); margin-bottom: .4rem; line-height: 1.45; font-style: italic; }
+  .pub-journal { font-size: .8rem; color: var(--muted); font-weight: 300; margin-bottom: .6rem; }
+  .pub-journal strong { color: var(--text); font-weight: 400; }
+  .pub-links { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .pub-link { font-size: .72rem; font-weight: 500; padding: 2px 9px; border-radius: 4px; text-decoration: none; transition: all .15s; }
+  .pub-link.doi { background: var(--pale); color: var(--mid); }
+  .pub-link.doi:hover { background: var(--light); color: var(--deep); }
+  .pub-link.hal { background: #e8f0fe; color: #1a47a3; }
+  .pub-link.hal:hover { background: #1a47a3; color: #fff; }
+  .pub-link.np { background: #fff3e0; color: #b85c00; }
+  .pub-badge { font-size: .65rem; font-weight: 500; padding: 2px 8px; border-radius: 3px; background: var(--deep); color: var(--light); margin-left: .5rem; vertical-align: middle; }
+
+  /* GRANTS */
+  .grant-list { display: flex; flex-direction: column; gap: .9rem; }
+  .grant-item { display: grid; grid-template-columns: 60px 1fr auto; gap: 1rem; align-items: start; padding: 1rem 1.25rem; background: #fff; border: 1px solid var(--sand); border-radius: 8px; }
+  .grant-year { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--accent); }
+  .grant-title { font-size: .88rem; font-weight: 400; color: var(--deep); margin-bottom: .2rem; }
+  .grant-funder { font-size: .78rem; color: var(--muted); font-weight: 300; }
+  .grant-amount { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--mid); font-weight: 400; white-space: nowrap; text-align: right; }
+  .grant-total { font-size: .82rem; color: var(--muted); font-weight: 300; margin-top: .5rem; }
+
+  /* TALKS */
+  .talk-list { display: flex; flex-direction: column; gap: .85rem; }
+  .talk-item { display: grid; grid-template-columns: 60px 1fr; gap: 1rem; align-items: start; }
+  .talk-year { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--accent); padding-top: .1rem; }
+  .talk-body { }
+  .talk-title { font-size: .88rem; font-weight: 400; color: var(--deep); font-style: italic; margin-bottom: .2rem; line-height: 1.4; }
+  .talk-where { font-size: .78rem; color: var(--muted); font-weight: 300; line-height: 1.5; }
+  .talk-badge { font-size: .62rem; font-weight: 500; padding: 1px 7px; border-radius: 3px; background: var(--pale); color: var(--mid); margin-right: .4rem; }
+  .talk-badge.invited { background: #fff3e0; color: #b85c00; }
+  .talk-badge.organised { background: #f3e8ff; color: #6b21a8; }
+
+  /* AWARDS */
+  .award-list { display: flex; flex-direction: column; gap: .75rem; }
+  .award-item { display: grid; grid-template-columns: 60px 1fr; gap: 1rem; }
+  .award-year { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--accent); }
+  .award-text { font-size: .88rem; color: var(--text); font-weight: 300; line-height: 1.5; }
+  .award-text strong { font-weight: 500; color: var(--deep); }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; margin-bottom: 2rem; border-bottom: 2px solid var(--sand); flex-wrap: wrap; }
+  .tab-btn { padding: .65rem 1.5rem; border: none; background: none; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 400; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s; white-space: nowrap; }
+  .tab-btn:hover { color: var(--accent); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  footer { background: var(--deep); padding: 1.75rem 2rem; text-align: center; color: rgba(208,245,242,.35); font-size: .75rem; font-weight: 300; letter-spacing: .05em; }
+  footer a { color: var(--light); text-decoration: none; opacity: .7; }
+
+  @media(max-width:680px) {
+    .position-item, .grant-item { grid-template-columns: 1fr; }
+    .grant-item { grid-template-columns: 1fr; }
+    .grant-amount { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-name">Artemis Anest</div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Research</a></li>
+    <li><a href="#">Teaching</a></li>
+    <li><a href="outreach/seed-ed/index.html">Outreach</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="breadcrumb-bar">
+  <span data-lang="fr" class="visible">Recherche</span>
+  <span data-lang="en">Research</span>
+  <span data-lang="cn">研究</span>
+</div>
+
+<div class="lang-bar">
+  <span class="lang-label">Lang</span>
+  <button class="lang-btn" data-lang-btn="fr" onclick="switchLang('fr')">Français</button>
+  <button class="lang-btn active" data-lang-btn="en" onclick="switchLang('en')">English</button>
+  <button class="lang-btn" data-lang-btn="cn" onclick="switchLang('cn')">中文</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Associate Professor · University of Montpellier · UMR AMAP</div>
+    <h1>Artemis Anest<br><em>Plant Architecture & Evolution</em></h1>
+    <p class="hero-bio" data-lang="en" style="display:block">
+      My research investigates the ecological and evolutionary mechanisms underlying plant architectural diversity across angiosperms. By integrating botany, functional ecology, and macroevolution, I seek to understand how developmental constraints, resource availability, and biotic interactions shape the evolution of plant form - from individual species to global patterns of diversification. My work bridges fundamental questions about plant diversity with applied challenges in biodiversity conservation, ecosystem health, and human-plant interactions within a One Health framework.
+    </p>
+    <p class="hero-bio" data-lang="fr">
+      Mes recherches portent sur les mécanismes écologiques et évolutifs qui sous-tendent la diversité architecturale des plantes à l'échelle des angiospermes. En intégrant botanique, écologie fonctionnelle et macroévolution, je cherche à comprendre comment les contraintes de développement, la disponibilité des ressources et les interactions biotiques façonnent l'évolution de la forme végétale, des espèces individuelles aux patrons globaux de diversification. Mes travaux établissent un pont entre des questions fondamentales sur la diversité végétale et des enjeux appliqués : conservation de la biodiversité, santé des écosystèmes et interactions plantes-humains dans un cadre One Health.
+    </p>
+    <p class="hero-bio" data-lang="cn">
+      我的研究探讨被子植物建筑多样性背后的生态与进化机制。通过整合植物学、功能生态学与宏观进化，我致力于理解发育约束、资源可用性与生物间相互作用如何塑造植物形态的进化--从个别物种到全球多样化格局。我的工作在植物多样性基础研究与应用挑战之间架起桥梁：生物多样性保护、生态系统健康，以及同一健康框架下的植物-人类相互作用。
+    </p>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label"><span data-lang="fr">Publications</span><span data-lang="en" style="display:inline">Publications</span><span data-lang="cn">论文</span></div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">106k€</div>
+        <div class="hero-stat-label"><span data-lang="fr">Financements (coord.)</span><span data-lang="en" style="display:inline">Grants (coord.)</span><span data-lang="cn">科研经费</span></div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">16</div>
+        <div class="hero-stat-label"><span data-lang="fr">Étudiants encadrés</span><span data-lang="en" style="display:inline">Students supervised</span><span data-lang="cn">指导学生</span></div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">392h</div>
+        <div class="hero-stat-label"><span data-lang="fr">Enseignement</span><span data-lang="en" style="display:inline">Teaching</span><span data-lang="cn">教学</span></div>
+      </div>
+    </div>
+    <div class="hero-links">
+      <a href="https://orcid.org/0000-0002-6661-4406" target="_blank" class="hero-link">🔬 ORCID 0000-0002-6661-4406</a>
+      <a href="#" class="hero-link">📄 ResearcherID IQW-0073-2023</a>
+      <a href="#" class="hero-link" id="cv-link"><span data-lang="fr">⬇ Télécharger le CV</span><span data-lang="en" style="display:inline">⬇ Download CV</span><span data-lang="cn">⬇ 下载简历</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page-wrap">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('publications', event)"><span data-lang="fr">📚 Publications</span><span data-lang="en" style="display:inline">📚 Publications</span><span data-lang="cn">📚 论文</span></button>
+    <button class="tab-btn" onclick="switchTab('positions', event)"><span data-lang="fr">🎓 Postes & Formation</span><span data-lang="en" style="display:inline">🎓 Positions & Education</span><span data-lang="cn">🎓 职位与教育</span></button>
+    <button class="tab-btn" onclick="switchTab('talks', event)"><span data-lang="fr">🎤 Conférences</span><span data-lang="en" style="display:inline">🎤 Talks & Workshops</span><span data-lang="cn">🎤 报告与工作坊</span></button>
+    <button class="tab-btn" onclick="switchTab('awards', event)"><span data-lang="fr">🏆 Distinctions</span><span data-lang="en" style="display:inline">🏆 Awards</span><span data-lang="cn">🏆 荣誉</span></button>
+  </div>
+
+  <!-- PUBLICATIONS -->
+  <div id="tab-publications" class="tab-content active">
+    <div class="section-eyebrow"><span data-lang="fr">Articles à comité de lecture</span><span data-lang="en" style="display:inline">Peer-reviewed articles</span><span data-lang="cn">同行评审论文</span></div>
+    <h2><span data-lang="fr">Publications</span><span data-lang="en" style="display:block">Publications</span><span data-lang="cn">学术论文</span></h2>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <div class="pub-num">2026 · 1</div>
+        <div class="pub-authors">Bezandry, R., Guyot, R., Ranarijaona, H. L. T., Sabatier, S., Vavitsara, M. E., & <strong>Anest, A.*</strong></div>
+        <div class="pub-title">Architectural singularities in wild Coffea (Baracoffea) species: integrated morphological perspectives for climate-resilient coffee cultivation.</div>
+        <div class="pub-journal"><strong>Plant Ecology & Diversity</strong>, 1–13.</div>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1080/17550874.2026.2637118" target="_blank" class="pub-link doi">DOI</a>
+          <a href="#" class="pub-link hal">HAL</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2025 · 2</div>
+        <div class="pub-authors">Tomlinson, K. W., Yu, F., Wang, X., Yao, X., Yu, C. C., Charles-Dominique, T., <strong>Anest, A.</strong> et al.</div>
+        <div class="pub-title">The macroecology of spines on woody plants.</div>
+        <div class="pub-journal"><strong>Biological Reviews</strong>.</div>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1111/brv.70051" target="_blank" class="pub-link doi">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2024 · 3</div>
+        <div class="pub-authors"><strong>Anest A.*</strong>, Bouchenak-Khelladi Y., Charles-Dominique T., Forest F., Caraglio Y., Hempson G.P., Maurin O., & Tomlinson K. W.</div>
+        <div class="pub-title">Block then sting: the two-step evolution of defensive architecture in herbivore-driven ecosystems. <span class="pub-badge">Nature Plants</span></div>
+        <div class="pub-journal"><strong>Nature Plants</strong>, 1–11.</div>
+        <div class="pub-links">
+          <a href="https://dx.doi.org/10.1038/s41477-024-01649-4" target="_blank" class="pub-link doi">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2024 · 4</div>
+        <div class="pub-authors">Bezandry R., Dupeyron M., <strong>Anest A.</strong>, Hamon P., Tiana R.H.L., Vavitsara M.E., Sabatier S.A., Guyot R.</div>
+        <div class="pub-title">The evolutionary history of three Baracoffea species from western Madagascar revealed by chloroplast and nuclear genomes.</div>
+        <div class="pub-journal"><strong>PLOS ONE</strong>, 19: e0296362.</div>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1371/journal.pone.0296362" target="_blank" class="pub-link doi">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2023 · 5</div>
+        <div class="pub-authors">Maurin O.*, <strong>Anest A.*</strong>, Forest F., Turner I., Barrett R.L., Cowan R.C., Wang L., Tomlinson K.W., Charles-Dominique T.</div>
+        <div class="pub-title">Drift in the tropics: phylogenetics and biogeographical patterns in Combretaceae.</div>
+        <div class="pub-journal"><strong>Global Ecology and Biogeography</strong>, 32: 1790–1802.</div>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1111/geb.13737" target="_blank" class="pub-link doi">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2023 · 6</div>
+        <div class="pub-authors">Guyot, R., Bezandry, R., Hamon, P., Dupeyron, M., Sabatier, S. A., <strong>Anest, A.</strong>, Tiana R.H.L. & Vavitsara, M. E.</div>
+        <div class="pub-title">Evolutionary history of three Baracoffea species from western Madagascar.</div>
+        <div class="pub-journal"><strong>ASIC</strong>.</div>
+        <div class="pub-links"></div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2021 · 7</div>
+        <div class="pub-authors">Maurin O., <strong>Anest A.</strong>, Bellot S., Biffin E., Brewer G., Charles-Dominique T. et al.</div>
+        <div class="pub-title">A nuclear phylogenomic study of the angiosperm order Myrtales, exploring the potential and limitations of the universal Angiosperms353 probe set.</div>
+        <div class="pub-journal"><strong>American Journal of Botany</strong>, 108: 1087–1111.</div>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1002/ajb2.1699" target="_blank" class="pub-link doi">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">2021 · 8</div>
+        <div class="pub-authors"><strong>Anest A.*</strong>, Charles-Dominique T., Maurin O., Millan M., Edelin C., & Tomlinson K. W.</div>
+        <div class="pub-title">Evolving the structure: climatic and developmental constraints on the evolution of plant architecture. A case study in Euphorbia.</div>
+        <div class="pub-journal"><strong>New Phytologist</strong>, 231: 1278–1295. - Commentary: Chomicki, 2021.</div>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1111/nph.17296" target="_blank" class="pub-link doi">DOI</a>
+          <a href="https://doi.org/10.1111/nph.17446" target="_blank" class="pub-link np">Commentary</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- POSITIONS & EDUCATION -->
+  <div id="tab-positions" class="tab-content">
+    <div class="section-eyebrow"><span data-lang="fr">Carrière</span><span data-lang="en" style="display:inline">Career</span><span data-lang="cn">职业生涯</span></div>
+    <h2><span data-lang="fr">Postes académiques</span><span data-lang="en" style="display:block">Academic Positions</span><span data-lang="cn">学术职位</span></h2>
+    <div class="position-list">
+      <div class="position-item">
+        <div class="position-year">2025–...</div>
+        <div class="position-body">
+          <div class="position-title">Associate Professor</div>
+          <div class="position-inst">University of Montpellier, France</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2022–2025</div>
+        <div class="position-body">
+          <div class="position-title">Researcher</div>
+          <div class="position-inst">UMR AMAP, CIRAD, Montpellier, France</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2023–2025</div>
+        <div class="position-body">
+          <div class="position-title">Adjunct Lecturer</div>
+          <div class="position-inst">University of Montpellier, France</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-eyebrow"><span data-lang="fr">Formation</span><span data-lang="en" style="display:inline">Education</span><span data-lang="cn">教育背景</span></div>
+    <h2><span data-lang="fr">Diplômes</span><span data-lang="en" style="display:block">Degrees</span><span data-lang="cn">学位</span></h2>
+    <div class="position-list">
+      <div class="position-item">
+        <div class="position-year">2023</div>
+        <div class="position-body">
+          <div class="position-title">Qualification for Associate Professor position (Section 68)</div>
+          <div class="position-inst">French National Universities Council (CNU)</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2018–2022</div>
+        <div class="position-body">
+          <div class="position-title">Ph.D. in Ecology</div>
+          <div class="position-inst">Peking University, China · Supervisor: Kyle W. Tomlinson (XTBG, CAS)<br>
+          <em style="font-size:.8rem;color:var(--muted)">"Resources and disturbances as drivers of the evolution of plant architecture"</em></div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2014–2016</div>
+        <div class="position-body">
+          <div class="position-title">Master's Degree in Tropical Plant Biodiversity</div>
+          <div class="position-inst">University of Montpellier, France</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <hr class="divider">
+    <div class="section-eyebrow"><span data-lang="fr">Encadrement</span><span data-lang="en" style="display:inline">Student supervision</span><span data-lang="cn">学生指导</span></div>
+    <h2><span data-lang="fr">16 étudiants encadrés</span><span data-lang="en" style="display:block">16 Students supervised</span><span data-lang="cn">16名学生指导</span></h2>
+    <div class="position-list">
+      <div class="position-item">
+        <div class="position-year">2025–...</div>
+        <div class="position-body">
+          <div class="position-title">Thibaud Gaudry — PhD (co-supervision)</div>
+          <div class="position-inst">Polish Academy of Sciences · Defense traits and dispersal modes in morphological evolution · Co-supervised with Marcin Chruski</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2024–...</div>
+        <div class="position-body">
+          <div class="position-title">Fabrice Kouame Kouassi — PhD (co-supervision)</div>
+          <div class="position-inst">University of Daloa, Ivory Coast · Plant architecture under domestication · Co-supervised with Jean-Baptiste Durand (CIRAD, UMR AMAP)</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2022–2024</div>
+        <div class="position-body">
+          <div class="position-title">Rickarlos Bezandry — PhD (co-supervision, defended 2024)</div>
+          <div class="position-inst">University of Mahajanga, Madagascar · Architecture and evolution of Coffea (Baracoffea) · Co-supervised with Romain Guyot (IRD, UMR DIADE)</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-year">2023–26</div>
+        <div class="position-body">
+          <div class="position-title">13 Bachelor's & Master's students</div>
+          <div class="position-inst">University of Montpellier (France), University of Berlin (Germany), University of Daloa (Ivory Coast)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TALKS -->
+  <div id="tab-talks" class="tab-content">
+    <div class="section-eyebrow"><span data-lang="fr">Communication scientifique</span><span data-lang="en" style="display:inline">Scientific communication</span><span data-lang="cn">学术交流</span></div>
+    <h2><span data-lang="fr">Séminaires invités</span><span data-lang="en" style="display:block">Invited Seminars</span><span data-lang="cn">受邀报告</span></h2>
+    <div class="talk-list">
+      <div class="talk-item">
+        <div class="talk-year">2026</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>"Hidden knowledge in herbarium plates: reconstructing plant architecture and its evolution from fragmental pictures"</div>
+          <div class="talk-where">Kew Seminars, Royal Botanic Gardens Kew, London, UK · 1 May 2026</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2026</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>"Ecological and evolutionary perspective on veteran tree management to guide current and future practices"</div>
+          <div class="talk-where">Veteran Trees Conference 2026, Stockholm, Sweden · April 2026</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2025</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>"Ecological and evolutionary history of plant lineages as essential"</div>
+          <div class="talk-where">International Symposium on Biodiversity, Global Change and Eco-Health & 3rd Workshop of the Sino-French IRN on Biodiversity, Haikou, China · October 2025</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2024</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>"The adaptive value of plant architecture: A functional trade-off reflecting plants' evolutionary history"</div>
+          <div class="talk-where">CAS-CNRS Seminar "Biodiversity, Global Change & EcoHealth", CNRS Headquarters, Paris · November 2024</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2023</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>"Plant architecture and its evolutionary significance" + "Drift in the tropics"</div>
+          <div class="talk-where">Kew Seminars, Royal Botanic Gardens Kew, London, UK · October 2023</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2023</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>"Progress in plant architecture: perspectives for evolution"</div>
+          <div class="talk-where">Launch Workshop of the CAS–CNRS Virtual Institute on Biodiversity, online · December 2023</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <h2><span data-lang="fr">Conférences internationales</span><span data-lang="en" style="display:block">International Talks</span><span data-lang="cn">国际报告</span></h2>
+    <div class="talk-list">
+      <div class="talk-item">
+        <div class="talk-year">2026</div>
+        <div class="talk-body">
+          <div class="talk-title">"Plant Evolutionary history as essential lessons from the past to understand ongoing and future changes"</div>
+          <div class="talk-where">62nd Annual Meeting ATBC, Jinghong, China · June–July 2026</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2024</div>
+        <div class="talk-body">
+          <div class="talk-title">"Drift in the tropics: Phylogenetics and biogeographical patterns in Combretaceae"</div>
+          <div class="talk-where">XX International Botanical Congress (IBC 2024), Madrid, Spain · July 2024</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2020</div>
+        <div class="talk-body">
+          <div class="talk-title">"Evolving the structure: climatic and developmental constraints on the evolution of plant architecture"</div>
+          <div class="talk-where">Savanna Science Network Meeting, Kruger National Park, South Africa · March 2020</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <h2><span data-lang="fr">Ateliers (organisés ou invités)</span><span data-lang="en" style="display:block">Workshops (organised or invited)</span><span data-lang="cn">工作坊</span></h2>
+    <div class="talk-list">
+      <div class="talk-item">
+        <div class="talk-year">2026</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge organised">Organised</span>Education and outreach initiatives for tropical biodiversity: a collaborative hands-on session</div>
+          <div class="talk-where">62nd Annual Meeting ATBC, Jinghong, China · June–July 2026</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2025</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge invited">Invited</span>SF-IRN-B Summer School "Biodiversity Conservation: Innovative Approaches for a Sustainable Future"</div>
+          <div class="talk-where">Kunming–Ailaoshan–Xishuangbanna, China · October 2025 (30 students)</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2025</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge organised">Organised</span>Botanical drawing and fundamentals of architectural analysis (21h)</div>
+          <div class="talk-where">University of Montpellier · co-organised with Tristan Charles-Dominique (CNRS, UMR AMAP)</div>
+        </div>
+      </div>
+      <div class="talk-item">
+        <div class="talk-year">2024</div>
+        <div class="talk-body">
+          <div class="talk-title"><span class="talk-badge organised">Organised</span>Architectural Training (12h, 32 participants)</div>
+          <div class="talk-where">UMR AMAP, Montpellier · co-organised with T. Charles-Dominique & Y. Caraglio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AWARDS -->
+  <div id="tab-awards" class="tab-content">
+    <div class="section-eyebrow"><span data-lang="fr">Reconnaissance</span><span data-lang="en" style="display:inline">Recognition</span><span data-lang="cn">荣誉与认可</span></div>
+    <h2><span data-lang="fr">Prix & Distinctions</span><span data-lang="en" style="display:block">Awards & Distinctions</span><span data-lang="cn">奖项与荣誉</span></h2>
+    <div class="award-list">
+      <div class="award-item">
+        <div class="award-year">2024–25</div>
+        <div class="award-text"><strong>Top 100 – L'Oréal-UNESCO For Women in Science</strong></div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2026</div>
+        <div class="award-text"><strong>Associate Editor</strong> – Methods in Ecology & Evolution</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2022</div>
+        <div class="award-text"><strong>Outstanding Graduate Award</strong> – University of the Chinese Academy of Sciences</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2021</div>
+        <div class="award-text"><strong>Publication Award</strong> – New Phytologist (Chinese Academy of Sciences) · 4,000$</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2021</div>
+        <div class="award-text"><strong>Excellent International Student Award</strong> – UCAS</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2021</div>
+        <div class="award-text"><strong>Merit Award</strong> – Xishuangbanna Tropical Botanical Garden</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2020</div>
+        <div class="award-text"><strong>Merit Award</strong> – Xishuangbanna Tropical Botanical Garden</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2019</div>
+        <div class="award-text"><strong>3rd Prize – Annual Seminar</strong> – Xishuangbanna Tropical Botanical Garden</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-eyebrow"><span data-lang="fr">Service</span><span data-lang="en" style="display:inline">Service</span><span data-lang="cn">学术服务</span></div>
+    <h2><span data-lang="fr">Éditorial & Révision</span><span data-lang="en" style="display:block">Editorial & Reviewing</span><span data-lang="cn">编辑与审稿</span></h2>
+    <div class="award-list">
+      <div class="award-item">
+        <div class="award-year">2026–...</div>
+        <div class="award-text"><strong>Associate Editor</strong> – Methods in Ecology & Evolution</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2024–...</div>
+        <div class="award-text"><strong>Grant reviewer</strong> – British Ecological Society (Outreach, Connecting ecologists, Small Grants)</div>
+      </div>
+      <div class="award-item">
+        <div class="award-year">2022–26</div>
+        <div class="award-text">Peer reviewer – New Phytologist, Annals of Botany, Journal of Ecology, Botanical Journal of the Linnean Society, Perspectives in Ecology and Evolution, International Journal of Plant Science</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Artemis Anest · Research · Teaching · Outreach &nbsp;·&nbsp;
+  <a href="https://orcid.org/0000-0002-6661-4406" target="_blank">ORCID</a> &nbsp;·&nbsp;
+  <a href="outreach/seed-ed/index.html">SEED-ED</a>
+</footer>
+
+<script>
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.langBtn === lang)
+    );
+    document.documentElement.lang = lang === 'cn' ? 'zh' : lang;
+    // hero bio paragraphs
+    document.querySelectorAll('.hero-bio[data-lang]').forEach(el => {
+      el.style.display = el.dataset.lang === lang ? 'block' : 'none';
+    });
+    // all data-lang spans/elements
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      if (el.tagName !== 'P') {
+        el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
+      }
+    });
+    // block-level data-lang (h2 spans)
+    document.querySelectorAll('h2 [data-lang]').forEach(el => {
+      el.style.display = el.dataset.lang === lang ? 'block' : 'none';
+    });
+    localStorage.setItem('lang', lang);
+  }
+
+  function switchTab(tab, event) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.target.closest('.tab-btn').classList.add('active');
+  }
+
+  switchLang(localStorage.getItem('lang') || 'en');
+</script>
+</body>
+</html>
